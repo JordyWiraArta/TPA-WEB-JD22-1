@@ -4,21 +4,81 @@
 
 type User {
   id: ID!
-  name: String!
+  first_name: String!
+  last_name: String!
   email: String!
   password: String!
+  profile_photo: String!
+  background_photo: String!
+  headline: String!
+  job: String!
+}
 
+type connect_invitation{
+  id: Int
+  user_src_id: ID!
+  user_dst_id: ID!
+  message: String!
+}
+
+type post{
+  id: Int!
+  poster_id: ID!
+  content_text: String!
+  photo: String!
+  video: String!
+}
+
+type comment{
+  id: Int!
+  post_id: Int!
+  comenter_id: ID!
+  content: String!
+}
+
+type likedComment{
+  id: Int!
+  comment: comment!
+  user_id: ID!
+}
+
+type likedPost{
+  id: Int!
+  post: post!
+  user_id: ID!
+}
+
+type followedUser{
+  user_id: ID!
+  followed_id: ID!
+}
+
+type connection{
+  user_id: ID!
+  connected_id: ID!
 }
 
 type Query {
   users: [User!]!
+  currUser(user_id:ID!): User!
+  posts: [post!]!
+  userPosts(user_id:ID!): [post!]! 
+  userInvitations(user_id:ID!): [connect_invitation!]!
+  comments(post_id: ID!): [comment!]!
+  likedComments(user_id:ID!, comment_id: Int!): [likedComment!]!
+  likedPost(user_id:ID!, post_id: Int!): [likedPost!]!
+  follows(user_id:ID!): [followedUser!]!
+  followers(user_id:ID!): [followedUser!]!
+  connects(user_id:ID!): [connection!]!
+  connectors(user_id:ID!): [connection!]!
 }
 
 input newUser{
-  id: ID!
-  name: String!
+  first_name: String!
+  last_name: String!
   email: String!
   password: String!
+  job: String!
 }
 
 type Mutation {

@@ -3,15 +3,65 @@
 package model
 
 type User struct {
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID              string `json:"id"`
+	FirstName       string `json:"first_name"`
+	LastName        string `json:"last_name"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	ProfilePhoto    string `json:"profile_photo"`
+	BackgroundPhoto string `json:"background_photo"`
+	Headline        string `json:"headline"`
+	Job             string `json:"job"`
+}
+
+type Comment struct {
+	ID         int    `json:"id"`
+	PostID     int    `json:"post_id"`
+	ComenterID string `json:"comenter_id"`
+	Content    string `json:"content"`
+}
+
+type ConnectInvitation struct {
+	ID        *int   `json:"id"`
+	UserSrcID string `json:"user_src_id"`
+	UserDstID string `json:"user_dst_id"`
+	Message   string `json:"message"`
+}
+
+type Connection struct {
+	UserID      string `json:"user_id"`
+	ConnectedID string `json:"connected_id"`
+}
+
+type FollowedUser struct {
+	UserID     string `json:"user_id"`
+	FollowedID string `json:"followed_id"`
+}
+
+type LikedComment struct {
+	ID      int      `json:"id"`
+	Comment *Comment `json:"comment"`
+	UserID  string   `json:"user_id"`
+}
+
+type LikedPost struct {
+	ID     int    `json:"id"`
+	Post   *Post  `json:"post"`
+	UserID string `json:"user_id"`
 }
 
 type NewUser struct {
-	ID		 string `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Job       string `json:"job"`
+}
+
+type Post struct {
+	ID          int    `json:"id"`
+	PosterID    string `json:"poster_id"`
+	ContentText string `json:"content_text"`
+	Photo       string `json:"photo"`
+	Video       string `json:"video"`
 }

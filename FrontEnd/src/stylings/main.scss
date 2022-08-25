@@ -1,0 +1,44 @@
+@import './colors.scss';
+@import url('http://fonts.cdnfonts.com/css/flama-light');
+
+
+.light{
+
+    .text
+    {
+        color: $black;
+        font-family: 'Flama Light', sans-serif;
+    }
+
+    .bg
+    {
+        background-color: $white;
+    }
+
+    #sbg
+    {
+        background-color: $lightGray;
+    }
+
+}
+
+.dark{
+
+    .text
+    {
+        color: $white;
+        font-family: 'Flama Light', sans-serif;
+    }
+
+    .bg
+    {
+        background-color: $black 
+        
+    }
+
+    .sbg
+    {
+        background-color: $dark;
+    }
+    
+}

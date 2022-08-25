@@ -1,0 +1,217 @@
+@use  'basic.scss' as *;
+@use 'colors.scss' as *;
+
+#foreBox{
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+    margin-top: 5%;
+    margin-left: 35%;
+    margin-right: 35%;
+    height: fit-content;
+    border: solid;
+    border-width: 2px;
+    border-color: $mediumGray;
+    border-radius: 10px;
+    padding: 40px;
+    font-weight: 800;
+
+    #title{
+        margin: 0px;
+        font-size: 55px;
+    }
+    #sub-title{
+        margin: 0px;
+        margin-top: 2px;
+        font-size: 15px;
+    }
+
+    #inputDiv{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        #inputBox{
+            padding: 15px;
+            margin-top: 20px;
+            border-width: 2px;
+            border-color: $lightGray;
+            border-radius: 10px;
+            font-size: 30px;
+            outline-color: $mediumGray;
+        }
+    }
+
+    #buttonSignIn{
+        background-color: $blue-600;
+        border-radius: 30px;
+        padding: 10px;
+        font-size: 25px;
+        color: $white;
+        border-width: 2px;
+        border-color: transparent;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+        outline-color: $linkedInBlue;
+        &:hover{
+            background-color: $blue-700;
+        }
+        &:active{
+            box-shadow: 0 6px 15px -3px rgb(0 0 0 / 0.2);
+            border-color: $black;
+        }
+
+    }
+
+    #or{
+        color: #585656;
+        font-size: 20px;
+        width: 100%;
+        text-align: center;
+        &:before{
+            background-color: $lightGray;
+            content: "";
+            display: inline-block;
+            height: 1px;
+            position: relative;
+            vertical-align: middle;
+            width: 40%;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        &:after {
+            @extend :before
+        }
+    }
+
+
+    #buttonGoogle{
+        @extend #buttonSignIn;
+        background-color: $white;
+        color: black;
+        padding: 0px;
+        max-height: fit-content;
+        img{
+            height: 40px;
+            margin: 0px;
+            margin-right: 5px;
+        }
+
+        &:hover{
+            background-color: $white-hover;
+        }
+        &:active{
+            box-shadow: 0 6px 10px -3px rgb(0 0 0 / 0.2);
+            border-color: transparent;
+        }
+    }
+}
+
+#foreBox-md{
+    @extend #foreBox;
+    margin-left: 20%;
+    margin-right: 20%;
+    #title{
+        font-size: 50px;
+        
+    }
+    #sub-title{
+        font-size: 15px;
+    }
+
+    #inputDiv{
+        #inputBox{
+            font-size: 20px;
+        }
+    }
+
+    #buttonSignIn{
+        font-size: 20px;
+    }
+
+    #or{
+        &::before{
+            width: 30%;
+        }
+        font-size: 15px;
+    }
+
+    #buttonGoogle{
+        img{
+            height: 30px;
+        }
+    }
+}
+
+#foreBox-sm{
+    @extend #foreBox;
+    padding: 15px;
+    margin-left: 20%;
+    margin-right: 20%;
+    #title{
+        font-size: 20px;
+        
+    }
+    #sub-title{
+        font-size: 10px;
+    }
+
+    #inputDiv{
+        #inputBox{
+            margin-top: 10px;
+            font-size: 13px;
+        }
+    }
+
+    #buttonSignIn{
+        margin-top: 5px;
+        font-size: 10px;
+    }
+
+    
+    #buttonGoogle{
+        img{
+            height: 20px;
+        }
+    }
+
+    #or{
+        &::before{
+            width: 30%;
+        }
+        font-size: 10px;
+    }
+}
+
+.dark{
+    #foreBox{
+        border-color: $dark-border;
+        #inputDiv{
+            #inputBox{
+                background-color: $lightGray;
+                outline-color: $mediumGray;
+            }
+        }
+
+        #buttonSignIn{
+            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.2);
+
+            &:active{
+                box-shadow: 0 6px 15px -3px rgba(255, 255, 255, 0.2);
+                border-color: $dark;
+            }
+        }
+
+        #buttonGoogle{
+            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.2);
+
+            background-color: $lightGray;
+            &:active{
+                box-shadow: 0 6px 15px -3px rgba(255, 255, 255, 0.2);
+                border-color: $dark;
+            }
+            &:hover{
+                background-color: $white;
+            }
+        }
+    }
+}
