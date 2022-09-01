@@ -1,0 +1,97 @@
+@use 'home.scss' as *;
+@use  'colors.scss' as *;
+
+.container-search{
+    margin-top: 7%;
+    margin-left: 20%;
+
+    #title{
+        display: block;
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+}
+
+.search-post{
+    @extend .home-post;
+    margin: 0;
+    width: 50%;
+}
+
+#peoples-container{
+    width: 50%; 
+    
+    #user-icon-peoples{
+        height: 40px;
+    }
+
+    
+    #people{
+        justify-content: space-between;
+        .data{
+            margin-left: 10px;
+            #username{
+                font-size: 20px;
+                font-weight: bold;
+            }
+    
+            #job{
+                font-size: 15px;
+            }
+    
+            #location{
+                font-size: 15px;
+                opacity: 0.6;
+            }
+        }
+        
+        #btn-connect{
+            height: fit-content;
+            padding: 5px;
+            border: solid;
+            color: $linkedInBlue;
+            cursor: pointer;
+            border-radius: 40px;
+
+            &:hover{
+                background-color: $blue-1;
+            }
+        }
+    }
+
+}
+
+.filter{
+    position: fixed;
+    top:15%;
+    left: 5%;
+    padding: 15px;
+    border-radius: 30px;
+    border:solid 1px;
+
+    #title{
+        font-weight: 800;
+    }
+
+    .btn-filter{
+        height: fit-content;
+        padding: 5px;
+        border: solid;
+        color: $black;
+        cursor: pointer;
+        border-width: 1px;
+        border-radius: 10px;
+        width: fit-content;
+        margin-top: 10px;
+        &:hover{
+            background-color: $white-hover;
+        }
+    }
+
+    .active{
+        border-width: 2px;
+        background-color: $white-hover;
+    }
+}

@@ -11,7 +11,10 @@ type User struct {
 	ProfilePhoto    string `json:"profile_photo"`
 	BackgroundPhoto string `json:"background_photo"`
 	Headline        string `json:"headline"`
-	Job             string `json:"job"`
+	Experience      string `json:"experience"`
+	Education       string `json:"education"`
+	IsActive        bool   `json:"is_active"`
+	ActiveCode      string `json:"active_code"`
 }
 
 type Comment struct {
@@ -55,7 +58,6 @@ type NewUser struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
-	Job       string `json:"job"`
 }
 
 type Post struct {
@@ -64,4 +66,16 @@ type Post struct {
 	ContentText string `json:"content_text"`
 	Photo       string `json:"photo"`
 	Video       string `json:"video"`
+}
+
+type UpdateUser struct {
+	FirstName       string `json:"first_name"`
+	LastName        string `json:"last_name"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	ProfilePhoto    string `json:"profile_photo"`
+	BackgroundPhoto string `json:"background_photo"`
+	Headline        string `json:"headline"`
+	Experience      string `json:"experience"`
+	Education       string `json:"education"`
 }

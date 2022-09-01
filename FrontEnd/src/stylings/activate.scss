@@ -1,0 +1,49 @@
+@use 'login.scss' as *;
+@use 'colors.scss' as *;
+
+
+#container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    #title{
+        @extend #title-out;
+        margin-top: 200px;
+    }
+    
+    #btn{
+        text-decoration: none;
+        font-size: 25px;
+        text-align: center;
+        font-weight: 700;
+        color: $linkedInBlue;
+    }
+}
+
+#container-md{
+    @extend #container;
+    #title{
+        font-size: 30px;
+    }
+
+    #btn{
+        font-size: 20px;
+    }
+}
+
+#container-sm{
+    @extend #container;
+    #title{
+        font-size: 20px;
+    }
+
+    #btn{
+        font-size: 15px;
+    }
+}
+
+.dark{
+    #btn{
+        color: $blue-3;
+    }
+}

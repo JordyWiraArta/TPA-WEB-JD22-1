@@ -46,8 +46,7 @@ import (
 	"github.com/jordywiraarta/golang-graphql/graph/generated"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"github.com/jordywiraarta/golang-graphql/database"
 )
 
 const defaultPort = "8080"
@@ -72,12 +71,7 @@ func main() {
 		port = defaultPort
 	}
 
-	dsn := "host=localhost user=postgres password=postgres dbname=linkhedin_db port=5000 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
-	if err != nil{
-		panic(err)
-	}
+	db := database.GetDB()
 
 	db.AutoMigrate(&model.User{})
 	router := mux.NewRouter();

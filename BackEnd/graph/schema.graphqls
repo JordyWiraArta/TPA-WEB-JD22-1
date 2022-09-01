@@ -11,7 +11,10 @@ type User {
   profile_photo: String!
   background_photo: String!
   headline: String!
-  job: String!
+  experience: String!
+  education:String!
+  is_active: Boolean!
+  active_code: String!
 }
 
 type connect_invitation{
@@ -78,9 +81,23 @@ input newUser{
   last_name: String!
   email: String!
   password: String!
-  job: String!
+}
+
+input updateUser{
+  first_name: String!
+  last_name: String!
+  email: String!
+  password: String!
+  profile_photo: String!
+  background_photo: String!
+  headline: String!
+  experience: String!
+  education: String!
 }
 
 type Mutation {
   createUser(input: newUser!): User!
+  updateUser(id: ID!, code:String!, input: updateUser!):User!
+  login(email:String!, password:String!):User!
+  resetEmail(email:String!):String!
 }

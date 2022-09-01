@@ -1,0 +1,178 @@
+@use 'colors.scss' as *;
+
+.light{
+    width: 100%;
+}
+
+.container{
+    
+    width: 100%;
+    background-color: $white;
+    border: solid 2px;
+    border-radius: 10px;
+    padding: 10px;
+    
+    
+    
+    #user-icon{
+        height: 50px;
+    }
+
+    #user-icon-posts{
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    #likes-username{
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    #poster-username{
+        font-size: 25px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    #content-img{
+        margin-top: 10px;
+        max-width: 100%;
+    }
+
+    #content-text{
+        margin-top: 10px;
+    }
+
+    .buttons{
+
+        #btn{
+            width: 25%;
+            justify-content: center;
+            opacity: 0.5;
+            cursor: pointer;
+            &:hover{
+                opacity: 1;
+            }
+        }
+
+        .icon{
+            height: 30px;
+        }
+    }
+}
+
+#grey{
+    color: $lightGray;
+    font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#posts-container{
+    margin-top: 30px;
+}
+
+#create-post{
+    #user-icon{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    #create-input{
+        width: 100%;
+        border-radius: 20px;
+        padding: 10px;
+        font-size: 17px;
+    }
+
+    
+}
+
+.home-profile{
+    position: sticky;
+    top:15%;
+    width: 18%;
+    margin-left: 120px;
+    height: fit-content;
+    background-color: $white;
+    border: solid 2px;
+    border-radius: 10px;
+    
+    #background-img{
+        max-width: 100%;
+        border-radius: 10px 10px 0px 0px;
+    }
+
+    #user-icon{
+        margin-top: -15%;
+        height: 70px;
+        border: solid $white;
+        border-radius: 70px;
+    }
+
+    .profile-data{
+        margin-top: 20px;
+
+        #username{
+            font-size: 16px;
+        }
+    
+        #job{
+            margin-top: 5px;
+            color: $lightGray;
+            font-size: 16px;
+        }
+    }
+
+    .connection-container{
+        width: 100%;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+
+        #label{
+            margin-left: 20px;
+        }
+
+        #counter{
+            margin-right: 20px;
+            color: $linkedInBlue;
+            font-weight: 800;
+            cursor: pointer;
+        }
+    }
+
+}
+
+.home-post{
+    width: 40%; 
+    margin-left: 50px;
+}
+
+#home-container{
+    margin-top: 10%;
+    width: 100%;
+    display: flex;
+
+}
+
+#home-container-md{
+    @extend #home-container;
+}
+
+#home-container-sm{
+    @extend #home-container-md;
+}
+
+.dark{
+    #create-input{
+        background-color: $lightGray;
+    }
+
+    #user-icon{
+        filter: invert(100%) sepia(78%) saturate(1211%) hue-rotate(211deg) brightness(130%) contrast(93%);
+    }
+
+    #signout-btn{
+        color: $dark;
+    }
+}

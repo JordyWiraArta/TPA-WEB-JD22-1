@@ -4,8 +4,10 @@
 
 .light{
 
+    width: 100%;
     .text
     {
+        margin: 0px;
         color: $black;
         font-family: 'Flama Light', sans-serif;
     }
@@ -24,15 +26,17 @@
 
 .dark{
 
+    width: 100%;
     .text
     {
+        margin: 0px;
         color: $white;
         font-family: 'Flama Light', sans-serif;
     }
 
     .bg
     {
-        background-color: $black 
+        background-color: $black;
         
     }
 

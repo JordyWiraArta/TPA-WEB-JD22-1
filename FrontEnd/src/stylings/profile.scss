@@ -1,0 +1,96 @@
+@use 'colors.scss' as *;
+@use 'home.scss' as *;
+@use 'modal.scss' as *;
+
+.profile{
+    @extend .home-profile;
+    position:relative;
+    margin-top: 8%;
+    width: 60%;
+
+    #background-img{
+        width: 100%;
+        max-height: 200px;
+    }
+    #user-icon{
+        margin-top: -20%;
+        height: 100px;
+        margin-left: 20px;
+    }
+
+    .button-bg{
+        position: absolute;
+        top: 2%;
+        right: 2%;
+        background-color: $white;
+        padding: 5px;
+        border-radius: 70px;
+        border: solid 1px;
+        border-color: $white;
+        opacity: 0.7;
+        cursor: pointer;
+        &:hover{
+            opacity: 1;
+            border-color: RGBA(0,70,255,1);
+        }
+    }
+
+    .button-edit{
+        position: relative;
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 20px;
+
+        #edit{
+            filter: none;
+            opacity: 0.7;
+            cursor: pointer;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
+
+    .icon{
+        padding: 0%;
+        margin: 0%;
+        height: 30px;
+        filter: invert(17%) sepia(56%) saturate(5989%) hue-rotate(226deg) brightness(105%) contrast(117%);
+    }
+
+    .profile-data{
+        margin-left: 20px;
+
+    
+        #username{
+            font-size: 25px;
+            font-weight: 700;
+        }
+    
+        #education{
+            color: $black;
+        }
+     
+        #connection{
+            color: $blue;
+            font-weight: 700;
+        }
+    }
+}
+
+.dark{
+    .profile{
+        .profile-data{
+            #education{
+                color: $white;
+            }
+        }
+
+        .button-edit{
+            #edit{
+                filter: invert(100%) sepia(0%) saturate(4754%) hue-rotate(230deg) brightness(101%) contrast(110%);
+            }
+        }
+    }
+}

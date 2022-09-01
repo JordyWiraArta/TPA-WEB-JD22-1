@@ -1,11 +1,27 @@
 @use  'basic.scss' as *;
 @use 'colors.scss' as *;
 
+#title-out{
+    font-size: 40px;
+    text-align: center;
+    font-weight: 600;
+}
+
+#title-md{
+    @extend #title-out;
+    font-size: 30px;
+}
+
+#title-sm{
+    @extend #title-out;
+    font-size: 20px;
+}
+
 #foreBox{
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4);
-    margin-top: 5%;
-    margin-left: 35%;
-    margin-right: 35%;
+    margin-top: 10px;
+    margin-left: 32%;
+    margin-right: 32%;
     height: fit-content;
     border: solid;
     border-width: 2px;
@@ -13,6 +29,7 @@
     border-radius: 10px;
     padding: 40px;
     font-weight: 800;
+
 
     #title{
         margin: 0px;
@@ -29,7 +46,9 @@
         margin-bottom: 10px;
         display: flex;
         flex-direction: column;
-        #inputBox{
+
+        
+        .inputBox{
             padding: 15px;
             margin-top: 20px;
             border-width: 2px;
@@ -38,6 +57,35 @@
             font-size: 30px;
             outline-color: $mediumGray;
         }
+        
+        #name{
+            display: flex;
+            justify-content: space-between;
+            #input{
+                @extend .inputBox;
+                margin-top: 0px;
+                width: 40%;
+            }
+
+        }
+    }
+
+    #errorMsg{
+        color: rgb(235, 32, 32);
+        text-align: center;
+        font-size: 20px;
+    }
+
+    #errorMsgS{
+        @extend #errorMsg;
+        border: transparent;
+        background-color:rgb(255, 155, 155); 
+        padding: 10px;
+    }
+
+    #success{
+        @extend #errorMsg;
+        color: $blue-500;
     }
 
     #buttonSignIn{
@@ -74,7 +122,7 @@
             height: 1px;
             position: relative;
             vertical-align: middle;
-            width: 40%;
+            width: 35%;
             margin-left: 10px;
             margin-right: 10px;
         }
@@ -104,6 +152,23 @@
             border-color: transparent;
         }
     }
+
+    #link{
+        margin-left: 2px;
+        text-decoration: none;
+        color: $blue-600;
+    }
+
+    #buttonChange{
+        @extend #buttonSignIn;
+    }
+
+    #buttonBack{
+        @extend #buttonGoogle;
+        border-radius: 0px;
+        padding: 10px;
+        box-shadow: none;
+    }
 }
 
 #foreBox-md{
@@ -119,13 +184,17 @@
     }
 
     #inputDiv{
-        #inputBox{
+        .inputBox{
             font-size: 20px;
         }
     }
 
     #buttonSignIn{
         font-size: 20px;
+    }
+
+    #errorMsg{
+        font-size: 15px;
     }
 
     #or{
@@ -139,6 +208,11 @@
         img{
             height: 30px;
         }
+    }
+
+    #link{
+        font-size: 12px;
+        margin-left: 1px;
     }
 }
 
@@ -156,7 +230,7 @@
     }
 
     #inputDiv{
-        #inputBox{
+        .inputBox{
             margin-top: 10px;
             font-size: 13px;
         }
@@ -173,6 +247,12 @@
             height: 20px;
         }
     }
+    
+    #errorMsg{
+        font-size: 10px;
+    }
+
+   
 
     #or{
         &::before{
@@ -180,13 +260,18 @@
         }
         font-size: 10px;
     }
+
+    #link{
+        font-size: 10px;
+        margin-left: 1px;
+    }
 }
 
 .dark{
     #foreBox{
         border-color: $dark-border;
         #inputDiv{
-            #inputBox{
+            .inputBox{
                 background-color: $lightGray;
                 outline-color: $mediumGray;
             }
@@ -213,5 +298,42 @@
                 background-color: $white;
             }
         }
+
+        #buttonBack{
+            background-color: $dark;
+            color: $white;
+            box-shadow: none;
+            &:hover{
+                background-color: $black;
+            }
+        }
     }
+
+}
+
+#signUp{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 20px;
+    #link{
+        margin-left: 2px;
+        text-decoration: none;
+        color: $blue-600;
+    }
+}
+
+#signUp-sm{
+    @extend #signUp;
+    font-size: 12px;
+    #link{
+        margin-left: 1px;
+    }
+}
+
+#signIn{
+    @extend #signUp;
+}
+
+#signIn-sm{
+    @extend #signUp-sm;
 }
