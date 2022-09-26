@@ -72,7 +72,7 @@ func main() {
 	}
 
 	db := database.GetDB()
-
+	database.MigrateTable()
 	db.AutoMigrate(&model.User{})
 	router := mux.NewRouter();
 	router.Use(MyCors);

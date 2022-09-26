@@ -10,12 +10,14 @@ import { Profile } from "../lib/symbols/Profile"
 import { useState } from "react"
 import { useContext } from "react"
 import { searchContext } from "../lib/contexts/searchContext"
+import { authContext } from "../lib/contexts/authContext"
 
-export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number}> = ({ nav, setSearch, width})=>{
+export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, username: String, setLogOut:Function, imgUrl:string}> = ({ nav, setSearch, width, username, setLogOut, imgUrl})=>{
     
     const navigateTo = useNavigate();
     const [show, setShow] = useState(false);
-    
+    const {setId} = useContext(authContext);
+
     let idNav = "nav-container";
     if(width < 1300 && width > 800) {
         idNav = "nav-container-md";
@@ -89,9 +91,9 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number}> 
                 </Link>}
                 
                 {width > 800 && <div className="dropdown">
-                    <Profile/>
+                    {imgUrl === ""? <Profile/>: <img className="icon-nav" id="profile" src={imgUrl}/>}
                     <div className="center-row"> 
-                        <p className="text" id="label">Me</p>
+                        <p className="text" id="label">{username !== "" ? username : "Loading"}</p>
                         <DownArrow/>
                     </div>
 
@@ -122,6 +124,8 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number}> 
                         <div className="content-item" >
                             <button onClick={()=>{
                                 localStorage.removeItem("userid");
+                                setId("");
+                                setLogOut(true);
                                 navigateTo("/");
                             }} className="text" id="signout-btn">sign out</button>
                         </div>

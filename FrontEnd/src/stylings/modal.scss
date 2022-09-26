@@ -10,6 +10,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-y: scroll;
+
+}
+
+.modal-post{
+    @extend .modal;
+    
+    padding-top: 250px;
+    padding-bottom: 100px;
 }
 
 .create-post-modal{
@@ -17,11 +26,19 @@
     height: fit-content;
     border-radius: 20px;
     padding: 1%;
+    #user-icon{
+        border-radius: 100px;
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 
     .header{
         display: flex;
         justify-content: space-between;
         // padding: 2%;
+        
     }
 
     #title{
@@ -31,8 +48,38 @@
     .icon{    
         height: 30px;
         padding: 2px;
-        
     }
+
+    .file-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        #image-post{
+            max-height: 250px;
+        }
+        .files{
+            width: fit-content;
+            align-self: center;
+        }
+        #btn-remove{
+            padding: 2px;
+            width: 10%;
+            height: 50%;
+            border-radius: 30px;
+            text-align: center;
+            align-self: center;
+            padding: 5px;
+
+            margin-bottom: 20px;
+            margin-top: 20px;
+            cursor: pointer;
+
+            background-color: rgb(253, 89, 89);
+
+        }
+    }
+
 
     #close{
         border: solid $white;
@@ -56,11 +103,20 @@
         &:hover{
             opacity: 1;
         }
-
+        input{
+            display: none;
+        }
     }
 
     .buttons{
         margin-top: 10px;
+    }
+
+    #errorMsg{
+        margin-top: 10px;
+        color: rgb(235, 32, 32);
+        text-align: center;
+        font-size: 20px;
     }
 
     #header-user{
@@ -73,7 +129,7 @@
         }
     }
 
-    .footer{
+    .footer-modal{
         display: flex;
         justify-content: space-between;
         
@@ -105,8 +161,116 @@
     }
 }
 
+.profile-modal{
+    @extend .create-post-modal;
+
+    .content{
+        display: flex;
+        align-items: center;
+
+        #loading{
+            margin-right: 20px;
+        }
+
+        #user-icon{
+
+            border-radius: 50px;
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+
+        #company-logo{
+            height: 120px;
+            margin-right: 20px;
+        }
+
+        #btn-change-profile-image{
+            color: $white;
+            background-color: $blue-500;
+            padding: 10px;
+            width: fit-content;
+            border-radius: 20px;
+            border: solid 1px;
+            border-color: $white;
+            cursor: pointer;
+            &:hover{
+                border-color: RGBA(0,70,255,1);
+            }
+
+            input{
+                display: none;
+            }
+        }
+    }
+
+    #close{
+        filter: none;
+    }
+
+    #errorMsg{
+        color: rgb(235, 32, 32);
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .input-block{
+        width: 100%;
+        #input-label{
+            margin-top: 10px;
+        }
+        .input-update{
+            width: 95%;
+            padding: 5px;
+            font-size: 20px;
+        }
+    }
+
+    .date-container{
+        width: 100%;
+        display: flex;
+        .input-update{
+            width: 80%;
+            font-size: 20px;
+        }
+    }
+
+    .footer-modal{
+        justify-content: end;
+        padding: 0;
+        margin-top: 20px;
+    }
+    
+    #btn-addnew{
+        padding: 0px;
+        width: 10%;
+        height: 50%;
+        border-radius: 20px;
+        text-align: center;
+        justify-self: flex-end;
+
+        padding: 5px;
+        cursor: pointer;
+
+        background-color: $linkedInBlue;
+        &:hover{
+            background-color: $blue;
+        }
+    }
+    
+}
+
 .dark{
-    .icon{
+    #image{
         filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(324deg) brightness(105%) contrast(103%);
+    }
+
+    #video{
+        filter: invert(99%) sepia(27%) saturate(314%) hue-rotate(181deg) brightness(115%) contrast(100%);
+    }
+    
+    #close{
+        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(211deg) brightness(104%) contrast(101%);
+
     }
 }

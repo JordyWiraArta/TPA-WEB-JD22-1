@@ -2,17 +2,37 @@
 #
 # https://gqlgen.com/getting-started/
 
+type Experience{
+  id: ID!
+  user_id: ID!
+  title: String!
+  employment_type: String!
+  company_name: String!
+  location: String!
+  start_date: String!
+  end_date: String!
+}
+
+type Education{
+  id: ID!
+  user_id: ID!
+  school: String!
+  degree: String!
+  field_of_study: String!
+  start_date: String!
+  end_date: String!
+}
+
 type User {
   id: ID!
   first_name: String!
   last_name: String!
+  job: String!
   email: String!
   password: String!
   profile_photo: String!
   background_photo: String!
   headline: String!
-  experience: String!
-  education:String!
   is_active: Boolean!
   active_code: String!
 }
@@ -25,29 +45,39 @@ type connect_invitation{
 }
 
 type post{
-  id: Int!
-  poster_id: ID!
-  content_text: String!
-  photo: String!
-  video: String!
-}
-
-type comment{
-  id: Int!
-  post_id: Int!
-  comenter_id: ID!
-  content: String!
-}
-
-type likedComment{
-  id: Int!
-  comment: comment!
+  id: ID!
   user_id: ID!
+  content_text: String!
+  url: String!
+  type: String!
+  likes: Int!
+  comments: Int!
 }
 
 type likedPost{
-  id: Int!
-  post: post!
+  post_id: ID!
+  user_id: ID!
+}
+
+type jobPost{
+  id: ID!
+  logo_url: String!
+  company_name: String!
+  job_name: String!
+  location: String!
+}
+
+type comment{
+  id: ID!
+  post_id: ID!
+  user_id: ID!
+  reply_id: ID!
+  content: String!
+  likes: Int!
+}
+
+type likedComment{
+  comment_id: ID!
   user_id: ID!
 }
 
@@ -64,16 +94,19 @@ type connection{
 type Query {
   users: [User!]!
   currUser(user_id:ID!): User!
-  posts: [post!]!
-  userPosts(user_id:ID!): [post!]! 
+  posts(number:Int!): [post!]!
   userInvitations(user_id:ID!): [connect_invitation!]!
-  comments(post_id: ID!): [comment!]!
-  likedComments(user_id:ID!, comment_id: Int!): [likedComment!]!
-  likedPost(user_id:ID!, post_id: Int!): [likedPost!]!
+  userEducations(user_id:ID!): [Education!]!
+  userExperiences(user_id:ID!): [Experience!]!
+  comments(post_id: ID!, number:Int!): [comment!]!
+  replyComments(post_id:ID!, comment_id:ID!, number:Int!):[comment!]!
+  likedComments(user_id:ID!, comment_id: ID!): [likedComment!]!
   follows(user_id:ID!): [followedUser!]!
   followers(user_id:ID!): [followedUser!]!
   connects(user_id:ID!): [connection!]!
   connectors(user_id:ID!): [connection!]!
+  jobPosts: [jobPost!]!
+  likedPosts(user_id:ID!, post_id:ID!): [likedPost!]!
 }
 
 input newUser{
@@ -91,13 +124,50 @@ input updateUser{
   profile_photo: String!
   background_photo: String!
   headline: String!
-  experience: String!
-  education: String!
+  job: String!
+}
+
+input inputExp{
+  user_id: ID!
+  title: String!
+  employment_type: String!
+  company_name: String!
+  location: String!
+  start_date: String!
+  end_date: String!
+}
+
+input inputEdu{
+  user_id: ID!
+  school: String!
+  degree: String!
+  field_of_study: String!
+  start_date: String!
+  end_date: String!
+}
+
+input newJobPost{
+  logo_url: String!
+  company_name: String!
+  job_name: String!
+  location: String!
 }
 
 type Mutation {
   createUser(input: newUser!): User!
   updateUser(id: ID!, code:String!, input: updateUser!):User!
+  addEdu(input:inputEdu!): Education!
+  addExp(input:inputExp): Experience!
+  updateUserEdu(id:ID!,input:inputEdu!): Education!
+  updateUserExp(id:ID!, input:inputExp!): Experience!
   login(email:String!, password:String!):User!
   resetEmail(email:String!):String!
+  createPost(userId:ID!, type: String!, content:String!, url:String!): post!
+  createJobPost(input:newJobPost!): jobPost!
+  likePost(user_id:ID!, post_id:ID!): likedPost!
+  unlikePost(user_id:ID!, post_id:ID!): likedPost!
+  createComment(user_id:ID!, post_id:ID!, content:String!): comment!
+  createReplyComment(user_id:ID!, post_id:ID!, comment_id:ID!, content:String!): comment!
+  likeComment(user_id:ID!, comment_id:ID!): likedComment!
+  unlikeComment(user_id:ID!, comment_id:ID!): likedComment!
 }

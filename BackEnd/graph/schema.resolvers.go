@@ -35,8 +35,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 				ProfilePhoto:    "",
 				BackgroundPhoto: "",
 				Headline:        "",
-				Experience:      "",
-				Education:       "",
+				Job:             "",
 				IsActive:        false,
 				ActiveCode:      uuid.NewString(),
 			}
@@ -109,8 +108,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, code strin
 		profile_photo := currUser.ProfilePhoto
 		background_photo := currUser.BackgroundPhoto
 		headline := currUser.Headline
-		experience := currUser.Experience
-		education := currUser.Education
+		job := currUser.Job
 
 		if input.FirstName != "" {
 			first_name = input.FirstName
@@ -140,12 +138,8 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, code strin
 			headline = input.Headline
 		}
 
-		if input.Experience != "" {
-			experience = input.Experience
-		}
-
-		if input.Education != "" {
-			education = input.Education
+		if input.Job != "" {
+			job = input.Job
 		}
 
 		err := db.Model(&user).Where("id = ?", id).Updates(model.User{
@@ -156,11 +150,76 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, code strin
 			ProfilePhoto:    profile_photo,
 			BackgroundPhoto: background_photo,
 			Headline:        headline,
-			Experience:      experience,
-			Education:		 education,
+			Job:             job,
 		}).Error
 		return user, err
 	}
+}
+
+// AddEdu is the resolver for the addEdu field.
+func (r *mutationResolver) AddEdu(ctx context.Context, input model.InputEdu) (*model.Education, error) {
+	newEdu := &model.Education{
+		ID:           uuid.NewString(),
+		UserID:       input.UserID,
+		School:       input.School,
+		Degree:       input.Degree,
+		FieldOfStudy: input.FieldOfStudy,
+		StartDate:    input.StartDate,
+		EndDate:      input.EndDate,
+	}
+
+	err := r.DB.Create(&newEdu).Error
+
+	return newEdu, err
+}
+
+// AddExp is the resolver for the addExp field.
+func (r *mutationResolver) AddExp(ctx context.Context, input *model.InputExp) (*model.Experience, error) {
+	newExp := &model.Experience{
+		ID:             uuid.NewString(),
+		UserID:         input.UserID,
+		Title:          input.Title,
+		EmploymentType: input.EmploymentType,
+		CompanyName:    input.CompanyName,
+		Location:       input.Location,
+		StartDate:      input.StartDate,
+		EndDate:        input.EndDate,
+	}
+
+	err := r.DB.Create(&newExp).Error
+
+	return newExp, err
+}
+
+// UpdateUserEdu is the resolver for the updateUserEdu field.
+func (r *mutationResolver) UpdateUserEdu(ctx context.Context, id string, input model.InputEdu) (*model.Education, error) {
+	db := database.GetDB()
+	edu := &model.Education{}
+	err := db.Model(&edu).Where("id like ?", id).Updates(model.Education{
+		Degree:       input.Degree,
+		School:       input.School,
+		FieldOfStudy: input.FieldOfStudy,
+		StartDate:    input.StartDate,
+		EndDate:      input.EndDate,
+	}).Error
+
+	return edu, err
+}
+
+// UpdateUserExp is the resolver for the updateUserExp field.
+func (r *mutationResolver) UpdateUserExp(ctx context.Context, id string, input model.InputExp) (*model.Experience, error) {
+	db := database.GetDB()
+	exp := &model.Experience{}
+	err := db.Model(&exp).Where("id like ?", id).Updates(model.Experience{
+		Title:          input.Title,
+		EmploymentType: input.EmploymentType,
+		CompanyName:    input.CompanyName,
+		Location:       input.Location,
+		StartDate:      input.StartDate,
+		EndDate:        input.EndDate,
+	}).Error
+
+	return exp, err
 }
 
 // Login is the resolver for the login field.
@@ -213,6 +272,191 @@ func (r *mutationResolver) ResetEmail(ctx context.Context, email string) (string
 	return code, err2
 }
 
+// CreatePost is the resolver for the createPost field.
+func (r *mutationResolver) CreatePost(ctx context.Context, userID string, typeArg string, content string, url string) (*model.Post, error) {
+	post := &model.Post{
+		ID:          uuid.NewString(),
+		UserID:      userID,
+		ContentText: content,
+		URL:         url,
+		Type:        typeArg,
+		Likes:       1,
+		Comments:    1,
+	}
+
+	err := r.DB.Create(&post).Error
+	return post, err
+}
+
+// CreateJobPost is the resolver for the createJobPost field.
+func (r *mutationResolver) CreateJobPost(ctx context.Context, input model.NewJobPost) (*model.JobPost, error) {
+	jobPost := &model.JobPost{
+		ID:          uuid.NewString(),
+		JobName:     input.JobName,
+		CompanyName: input.CompanyName,
+		Location:    input.Location,
+		LogoURL:     input.LogoURL,
+	}
+
+	err := r.DB.Create(&jobPost).Error
+	return jobPost, err
+}
+
+// LikePost is the resolver for the likePost field.
+func (r *mutationResolver) LikePost(ctx context.Context, userID string, postID string) (*model.LikedPost, error) {
+	db := database.GetDB()
+	var post model.Post
+	err1 := db.Model(post).Where("id LIKE ?", postID).Take(&post).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberLikes := post.Likes + 1
+	err2 := db.Model(&post).Where("id LIKE ?", postID).Updates(model.Post{
+		Likes: numberLikes,
+	}).Error
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+	var likedPost = &model.LikedPost{
+		PostID: postID,
+		UserID: userID,
+	}
+
+	err := r.DB.Create(&likedPost).Error
+
+	return likedPost, err
+}
+
+// UnlikePost is the resolver for the unlikePost field.
+func (r *mutationResolver) UnlikePost(ctx context.Context, userID string, postID string) (*model.LikedPost, error) {
+	db := database.GetDB()
+	var post model.Post
+	err1 := db.Model(post).Where("id LIKE ?", postID).Take(&post).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberLikes := post.Likes - 1
+	err2 := db.Model(&post).Where("id LIKE ?", postID).Updates(model.Post{
+		Likes: numberLikes,
+	}).Error
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+	var likedPost model.LikedPost
+	err := db.Where("post_id LIKE ? AND user_id LIKE ?", postID, userID).Delete(&likedPost).Error
+
+	return &likedPost, err
+}
+
+// CreateComment is the resolver for the createComment field.
+func (r *mutationResolver) CreateComment(ctx context.Context, userID string, postID string, content string) (*model.Comment, error) {
+	db := database.GetDB()
+
+	var post model.Post
+	err1 := db.Model(post).Where("id LIKE ?", postID).Take(&post).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberComments := post.Comments + 1
+	err2 := db.Model(&post).Where("id like ?", postID).Updates(model.Post{
+		Comments: numberComments,
+	}).Error
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+	comment := &model.Comment{
+		ID:      uuid.NewString(),
+		UserID:  userID,
+		Content: content,
+		PostID:  postID,
+		ReplyID: "",
+		Likes:   1,
+	}
+
+	err := r.DB.Create(&comment).Error
+
+	return comment, err
+}
+
+// CreateReplyComment is the resolver for the createReplyComment field.
+func (r *mutationResolver) CreateReplyComment(ctx context.Context, userID string, postID string, commentID string, content string) (*model.Comment, error) {
+	comment := &model.Comment{
+		ID:      uuid.NewString(),
+		UserID:  userID,
+		Content: content,
+		PostID:  postID,
+		ReplyID: commentID,
+		Likes:   1,
+	}
+
+	err := r.DB.Create(&comment).Error
+	return comment, err
+}
+
+// LikeComment is the resolver for the likeComment field.
+func (r *mutationResolver) LikeComment(ctx context.Context, userID string, commentID string) (*model.LikedComment, error) {
+
+	db := database.GetDB()
+
+	var comment model.Comment
+	err1 := db.Model(comment).Where("id LIKE ?", commentID).Take(&comment).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberLike := comment.Likes + 1
+	err2 := db.Model(&comment).Where("id like ?", commentID).Updates(model.Comment{
+		Likes: numberLike,
+	}).Error
+
+	if err2 != nil{
+		return nil, err2
+	}
+
+	likeComment := &model.LikedComment{
+		UserID:		userID,
+		CommentID:	commentID,
+	}
+
+	err := r.DB.Create(&likeComment).Error
+
+	return likeComment, err
+}
+
+// UnlikeComment is the resolver for the unlikeComment field.
+func (r *mutationResolver) UnlikeComment(ctx context.Context, userID string, commentID string) (*model.LikedComment, error) {
+	db := database.GetDB()
+
+	var comment model.Comment
+	err1 := db.Model(comment).Where("id LIKE ?", commentID).Take(&comment).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberLike := comment.Likes - 1
+	err2 := db.Model(&comment).Where("id like ?", commentID).Updates(model.Comment{
+		Likes: numberLike,
+	}).Error
+
+	if err2 != nil{
+		return nil, err2
+	}
+
+	var likedComment model.LikedComment
+	err := db.Where("comment_id LIKE ? AND user_id LIKE ?", commentID, userID).Delete(&likedComment).Error
+
+	return &likedComment, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	var users []*model.User
@@ -230,13 +474,10 @@ func (r *queryResolver) CurrUser(ctx context.Context, userID string) (*model.Use
 }
 
 // Posts is the resolver for the posts field.
-func (r *queryResolver) Posts(ctx context.Context) ([]*model.Post, error) {
-	panic(fmt.Errorf("not implemented: Posts - posts"))
-}
-
-// UserPosts is the resolver for the userPosts field.
-func (r *queryResolver) UserPosts(ctx context.Context, userID string) ([]*model.Post, error) {
-	panic(fmt.Errorf("not implemented: UserPosts - userPosts"))
+func (r *queryResolver) Posts(ctx context.Context, number int) ([]*model.Post, error) {
+	var posts []*model.Post
+	err := r.DB.Limit(number).Order("id asc").Find(&posts).Error
+	return posts, err
 }
 
 // UserInvitations is the resolver for the userInvitations field.
@@ -244,19 +485,44 @@ func (r *queryResolver) UserInvitations(ctx context.Context, userID string) ([]*
 	panic(fmt.Errorf("not implemented: UserInvitations - userInvitations"))
 }
 
+// UserEducations is the resolver for the userEducations field.
+func (r *queryResolver) UserEducations(ctx context.Context, userID string) ([]*model.Education, error) {
+	var educations []*model.Education
+	err := r.DB.Where("user_id like ?", userID).Find(&educations).Error
+
+	return educations, err
+}
+
+// UserExperiences is the resolver for the userExperiences field.
+func (r *queryResolver) UserExperiences(ctx context.Context, userID string) ([]*model.Experience, error) {
+	var experiences []*model.Experience
+	err := r.DB.Where("user_id like ?", userID).Find(&experiences).Error
+
+	return experiences, err
+}
+
 // Comments is the resolver for the comments field.
-func (r *queryResolver) Comments(ctx context.Context, postID string) ([]*model.Comment, error) {
-	panic(fmt.Errorf("not implemented: Comments - comments"))
+func (r *queryResolver) Comments(ctx context.Context, postID string, number int) ([]*model.Comment, error) {
+	var comments []*model.Comment
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, "").Limit(number).Find(&comments).Error
+
+	return comments, err
+}
+
+// ReplyComments is the resolver for the replyComments field.
+func (r *queryResolver) ReplyComments(ctx context.Context, postID string, commentID string, number int) ([]*model.Comment, error) {
+	var comments []*model.Comment
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, commentID).Limit(number).Find(&comments).Error
+
+	return comments, err
 }
 
 // LikedComments is the resolver for the likedComments field.
-func (r *queryResolver) LikedComments(ctx context.Context, userID string, commentID int) ([]*model.LikedComment, error) {
-	panic(fmt.Errorf("not implemented: LikedComments - likedComments"))
-}
+func (r *queryResolver) LikedComments(ctx context.Context, userID string, commentID string) ([]*model.LikedComment, error) {
+	var likedComment []*model.LikedComment
+	err := r.DB.Where("comment_id LIKE ? AND user_id LIKE ?", commentID, userID).Find(&likedComment).Error
 
-// LikedPost is the resolver for the likedPost field.
-func (r *queryResolver) LikedPost(ctx context.Context, userID string, postID int) ([]*model.LikedPost, error) {
-	panic(fmt.Errorf("not implemented: LikedPost - likedPost"))
+	return likedComment, err
 }
 
 // Follows is the resolver for the follows field.
@@ -277,6 +543,22 @@ func (r *queryResolver) Connects(ctx context.Context, userID string) ([]*model.C
 // Connectors is the resolver for the connectors field.
 func (r *queryResolver) Connectors(ctx context.Context, userID string) ([]*model.Connection, error) {
 	panic(fmt.Errorf("not implemented: Connectors - connectors"))
+}
+
+// JobPosts is the resolver for the jobPosts field.
+func (r *queryResolver) JobPosts(ctx context.Context) ([]*model.JobPost, error) {
+	var jobPosts []*model.JobPost
+	err := r.DB.Find(&jobPosts).Error
+
+	return jobPosts, err
+}
+
+// LikedPosts is the resolver for the likedPosts field.
+func (r *queryResolver) LikedPosts(ctx context.Context, userID string, postID string) ([]*model.LikedPost, error) {
+	var likedPosts []*model.LikedPost
+	err := r.DB.Where("post_id LIKE ? AND user_id LIKE ?", postID, userID).Find(&likedPosts).Error
+
+	return likedPosts, err
 }
 
 // Mutation returns generated.MutationResolver implementation.

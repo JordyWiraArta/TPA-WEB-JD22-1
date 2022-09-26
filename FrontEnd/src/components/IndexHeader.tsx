@@ -1,6 +1,6 @@
 import {Header} from "./Header"
 import '../stylings/headers.scss'
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { ThemeContext, widthContext } from "../App"
 import { Light } from "../lib/symbols/Light"
 import { Dark } from "../lib/symbols/Dark"
@@ -16,10 +16,28 @@ export default function IndexHeader(){
     const {logo} = useContext(ThemeContext);
     const {width, setWidth} = useContext(widthContext);
     const {currTheme, setCurrTheme} = useContext(ThemeContext);
-    const {user, setUser} = useContext(authContext);
+    const {id} = useContext(authContext);
     const {search, setSearch} = useContext(searchContext);
     const navigateTo = useNavigate();
-    
+    const [logout, setLogOut] = useState(false);
+
+    const [userid, setUserId] = useState("");
+    var user = {
+        background_photo:"",
+        first_name:"",
+        last_name:"",
+        profile_photo: ""
+    };
+    const {loading, error, data, refetch} = useQuery(GET_CURR_USER, {
+        variables:{
+            id: id
+        }
+    });
+
+    if(!loading){
+        user = data.currUser;
+    }
+
     const currPath = window.location.pathname;
     const arrPath = currPath.split("/");
 
@@ -31,27 +49,31 @@ export default function IndexHeader(){
         toggleClass = "toggle-dark-light-sm";
     }
 
-    let userid = "";
-    if(localStorage.getItem('userid') !== null){
-        userid = JSON.parse(localStorage.getItem('userid'));
-   }
+    let username = "", imgUrl = "";
 
-   if(userid !== ""){
-       
-        const {loading, error, data} = useQuery(GET_CURR_USER, {
-            variables:{
-                id: userid
-            }
-        });
-     
-        if(data != undefined){
-            setUser(data.currUser);
-        }
-    } 
+    if(localStorage.getItem('theme') !== null && currTheme !== JSON.parse(localStorage.getItem('theme')!)){
+        setCurrTheme(JSON.parse(localStorage.getItem('theme')!));
+    }  
 
+    if(localStorage.getItem('userid') !== null && userid === ""){
+        setUserId("ada");
+    }  
+
+    function setTheme(theme:String){
+        localStorage.setItem('theme', JSON.stringify(theme));
+    }
+
+    if(id !== ""){
+        username = user.first_name + " " + user.last_name;
+        imgUrl = user.profile_photo;
+    }
 
     if(arrPath[1] !== "linkhedIn"){
         
+        if(userid !== "") {
+            navigateTo("/linkhedIn/home");
+        }
+
         if(currTheme === "dark"){
             document.body.style.backgroundColor = "#000000";
         } else {
@@ -60,8 +82,9 @@ export default function IndexHeader(){
 
         return <div className="flex justify-between items-center">
             <Header logo={logo} width={width} theme={currTheme}/>
-            <div className="items-center">
-            {currTheme === "light" ?<Light setTheme={setCurrTheme}/> : <Dark setTheme={setCurrTheme}/>}
+            <div className="items-center" onClick = {()=> currTheme === "light" ? setCurrTheme("dark") : setCurrTheme("light")}>
+            {currTheme === "light" ?<Light setTheme={setTheme}/> : <Dark setTheme={setTheme}/>}
+
             </div>
         </div>
     } else {
@@ -72,18 +95,24 @@ export default function IndexHeader(){
         if(currTheme === "dark"){
             document.body.style.backgroundColor = "#292929";
         } else {
-            document.body.style.backgroundColor = "#dadadb";
+            document.body.style.backgroundColor = "#f7f7f7";
         }
 
         return <div className={currTheme} >
             <div onClick={()=> {
-                if(currTheme === "light") setCurrTheme("dark");
-                else setCurrTheme("light")
+                    if(currTheme === "light") {
+                        setTheme("dark");
+                        setCurrTheme("dark");
+                    }
+                    else {
+                        setTheme("light");
+                        setCurrTheme("light");
+                    }
                 }} className={toggleClass}>
                 <p className="text" id="theme-text">{currTheme === "light" ? "light" : "dark"}</p>
                 {currTheme === "light" ? <Light setTheme={()=>{}}/>: <Dark setTheme={()=>{}}/>}
             </div>
-            <NavBar setSearch={setSearch} nav={arrPath[2]} width={width}/>
+            <NavBar setSearch={setSearch} nav={arrPath[2]} width={width} username={username} setLogOut={setLogOut} imgUrl={imgUrl}/>
         </div> 
     }
 }

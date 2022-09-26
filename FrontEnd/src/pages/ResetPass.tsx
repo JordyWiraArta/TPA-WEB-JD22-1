@@ -94,6 +94,7 @@ export default function ResetPass(){
             console.log(data)
             setSuccess("reset password success!");
             setErrorMsg("");
+            navigateTo("/");
         }).catch((err)=>{
             setSuccess("");
             setErrorMsg(err.message);

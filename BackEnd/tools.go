@@ -1,5 +1,5 @@
 // tools.go
 
-package tools 
+package tools
 
 import _ "github.com/99designs/gqlgen"

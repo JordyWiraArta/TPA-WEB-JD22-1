@@ -5,13 +5,13 @@ export const GET_ALL_USERS= gql`
         users{
             id
             first_name
+            last_name
             email
+            job
             password
             profile_photo
             background_photo
             headline
-            education
-            experience
         }
     }
 `
@@ -23,12 +23,11 @@ export const GET_CURR_USER = gql`
             first_name
             last_name
             email
+            job
             password
             profile_photo
             background_photo
             headline
-            experience
-            education
         }
     }
 `
@@ -51,13 +50,12 @@ mutation setActive($code:String!){
     updateUser(id:"", code:$code, input:{
       first_name: "",
       last_name: "",
-      experience: "",
       headline: "",
       password: "",
       email: "",
+      job: "",
       background_photo: "",
-      profile_photo: "",
-      education: ""
+      profile_photo: ""
     }){
         is_active
     }
@@ -71,14 +69,30 @@ export const UPDATE_USER = gql`
         first_name
         last_name
         email
+        job
         password
-        education
         headline
         background_photo
         profile_photo
-        experience
         }
     }
+`
+
+export const UPDATE_BACKGROUND = gql`
+  mutation updateBackground($id:ID!, $bg:String!){
+    updateUser(id:$id, code:"", input:{
+      first_name: "",
+      last_name: "",
+      headline: "",
+      password: "",
+      email: "",
+      job: "",
+      background_photo: $bg,
+      profile_photo: ""
+    }){
+      background_photo
+    }
+  }
 `
 
 export const LOGIN = gql`
@@ -100,13 +114,12 @@ export const RESET_PASSWORD = gql`
     updateUser(id:"reset", code:$code, input:{
       first_name: ""
       last_name: ""
-      education: ""
       headline: ""
       password: $password
+      job: ""
       email: ""
       background_photo: ""
       profile_photo: ""
-      experience: ""
     }){
       email
     }

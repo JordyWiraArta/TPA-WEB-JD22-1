@@ -5,7 +5,7 @@
 .profile{
     @extend .home-profile;
     position:relative;
-    margin-top: 8%;
+    margin-top: 100px;
     width: 60%;
 
     #background-img{
@@ -18,6 +18,7 @@
         margin-left: 20px;
     }
 
+    
     .button-bg{
         position: absolute;
         top: 2%;
@@ -32,6 +33,10 @@
         &:hover{
             opacity: 1;
             border-color: RGBA(0,70,255,1);
+        }
+
+        input{
+            display: none;
         }
     }
 
@@ -52,14 +57,19 @@
         }
     }
 
-    .icon{
+    #edit{
         padding: 0%;
         margin: 0%;
         height: 30px;
         filter: invert(17%) sepia(56%) saturate(5989%) hue-rotate(226deg) brightness(105%) contrast(117%);
     }
 
+    #camera{
+        @extend #edit;
+    }
+
     .profile-data{
+        margin-bottom: 20px;
         margin-left: 20px;
 
     
@@ -77,10 +87,102 @@
             font-weight: 700;
         }
     }
+
+    #profile-icon{
+        @extend #user-icon;
+        width: 100px;
+    }
+    
+}
+
+
+.profile-component{
+    @extend .profile;
+    margin-top: 20px;
+
+    
+
+    .header-component{
+        display: flex;
+        padding: 20px;
+        align-items: center;
+        justify-content: space-between;
+
+        #sub-title{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #btn-add{
+            height: fit-content;
+            justify-self: flex-end;
+            padding: 0;
+            opacity: 1;
+            cursor: pointer;
+            #add{
+                height: 40px;
+            }
+
+            :hover{
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .item-component{
+        .item{
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+
+            #title{
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            #secondary{
+                font-size: 15px;
+            }
+
+            #tertiary{
+                font-size: 14px;
+                opacity: 0.8;
+            }
+
+            #quartery{
+                font-size: 12px;
+                opacity: 0.5;
+            }
+            .btn-contain{
+                align-self: flex-start;
+                display: flex;
+                justify-content: flex-end;
+
+                .btn-edit-round{
+                    width: fit-content;
+                    padding: 5px;
+                    display: flex;
+                    align-items: center;
+                    border: solid;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    #edit{
+                        margin-left: 10px;
+                        filter: none;
+                    }
+                }
+            }
+            
+        }
+        
+    }
 }
 
 .dark{
     .profile{
+        #user-icon{
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(211deg) brightness(104%) contrast(101%);
+        }
+
         .profile-data{
             #education{
                 color: $white;
@@ -92,5 +194,11 @@
                 filter: invert(100%) sepia(0%) saturate(4754%) hue-rotate(230deg) brightness(101%) contrast(110%);
             }
         }
+        
+        #profile-icon{
+            border-color: black;          
+            filter: none;
+        }
+    
     }
 }

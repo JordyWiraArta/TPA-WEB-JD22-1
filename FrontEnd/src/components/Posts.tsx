@@ -1,53 +1,58 @@
-import { Send, Like, Comment, Share } from "../lib/symbols/PostFeatures"
+import { useQuery } from "@apollo/client"
+import { GET_POSTS } from "../lib/queryPost"
+import Hearth from "../lib/symbols/Hearth";
+import { LoadingText } from "./LoadingText";
+import { PostButtons } from "./Post Component/PostButtons";
+import { UserPostView } from "./Post Component/UserPostView";
 
-export const Posts: React.FC<{isSearch:boolean}> = ({isSearch})=>{
-    return <div className="container bg" id="posts-container">
+export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function, user:any}> = ({isSearch, fetch, setFetch, user})=>{
+
+    const {loading, error, data, refetch} = useQuery(GET_POSTS, {
+        variables:{
+            limit: 5
+        }
+    });
+
+    if(fetch){
+        refetch();
+        setFetch(false);
+    }
+
+    if(loading) return <LoadingText/>
+    else return <div>
+    
+        {isSearch &&<div className="container bg" id="posts-container">
+         <p className="text" id="title">Posts</p>
+        </div>}
+
+
+        {data.posts.map((post:any, index:number)=>{
+            console.log(post)
+            return <div className="container bg" id="posts-container" key={post.id}>
+                <div className="flex items-center">
+                    <img id="user-icon-posts" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
+                    <p className="text" id="likes-username">like's username</p>
+                    <p className="text" id="grey">likes this</p>
+                </div>
+                <hr />
+                
+                <UserPostView userid={post.user_id}/>
+                <div className="content-container">
+                    {post.type === "image" && <img id="content-img" src={post.url} alt="" />}
+                    {post.type === "video" && <video src={post.url} controls/>}
+                    <p className="text" id="content-text"> {post.content_text}</p>
+                </div>
+
+                <div className="info-container">
+                    <p className="text">{post.likes-1}</p>
+                    <Hearth/>
+                </div>
+
+                <hr />
+
+                <PostButtons user={user} post={post} setFetch={setFetch}/>
+            </div>
+        })}
         
-        {isSearch && <p className="text" id="title">Posts</p>}
-
-        <div className="flex items-center">
-            <img id="user-icon-posts" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
-            <p className="text" id="likes-username">like's username</p>
-            <p className="text" id="grey">likes this</p>
-        </div>
-        <hr />
-        <div className="poster-container flex items-center">
-        <img id="user-icon" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
-            <div>
-            <p className="text" id="poster-username">Poster's username</p>
-            <p className="text" id="grey">total follower</p>
-            </div>
-        </div>
-
-        <div className="content-container">
-            <img id="content-img" src="https://salesdorado.com/wp-content/uploads/2021/05/rediger-post-linkedin.jpg" alt="" />
-            <p className="text" id="content-text"> this is example of the post content: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-        </div>
-
-        <hr />
-
-        <div className="buttons flex">
-            <div className="flex items-center" id="btn">
-                <Like/>
-                <p className="text">Like</p>
-            </div>
-
-            <div className="flex items-center" id="btn">
-                <Comment/>
-                <p className="text">Comment</p>
-            </div>
-
-            <div className="flex items-center" id="btn">
-                <Share/>
-                <p className="text">Share</p>
-            </div>
-
-            <div className="flex items-center" id="btn">
-                <Send/>
-                <p className="text">Send</p>
-            </div>
-            
-           
-        </div>
     </div>
 }

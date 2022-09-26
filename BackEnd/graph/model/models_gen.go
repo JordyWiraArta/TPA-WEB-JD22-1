@@ -2,26 +2,48 @@
 
 package model
 
+type Education struct {
+	ID           string `json:"id"`
+	UserID       string `json:"user_id"`
+	School       string `json:"school"`
+	Degree       string `json:"degree"`
+	FieldOfStudy string `json:"field_of_study"`
+	StartDate    string `json:"start_date"`
+	EndDate      string `json:"end_date"`
+}
+
+type Experience struct {
+	ID             string `json:"id"`
+	UserID         string `json:"user_id"`
+	Title          string `json:"title"`
+	EmploymentType string `json:"employment_type"`
+	CompanyName    string `json:"company_name"`
+	Location       string `json:"location"`
+	StartDate      string `json:"start_date"`
+	EndDate        string `json:"end_date"`
+}
+
 type User struct {
 	ID              string `json:"id"`
 	FirstName       string `json:"first_name"`
 	LastName        string `json:"last_name"`
+	Job             string `json:"job"`
 	Email           string `json:"email"`
 	Password        string `json:"password"`
 	ProfilePhoto    string `json:"profile_photo"`
 	BackgroundPhoto string `json:"background_photo"`
 	Headline        string `json:"headline"`
-	Experience      string `json:"experience"`
-	Education       string `json:"education"`
 	IsActive        bool   `json:"is_active"`
 	ActiveCode      string `json:"active_code"`
 }
 
 type Comment struct {
-	ID         int    `json:"id"`
-	PostID     int    `json:"post_id"`
-	ComenterID string `json:"comenter_id"`
-	Content    string `json:"content"`
+	ID      string `json:"id"`
+	PostID  string `json:"post_id"`
+	UserID  string `json:"user_id"`
+	ReplyID string `json:"reply_id"`
+	Content string `json:"content"`
+	Likes   int    `json:"likes"`
 }
 
 type ConnectInvitation struct {
@@ -41,16 +63,48 @@ type FollowedUser struct {
 	FollowedID string `json:"followed_id"`
 }
 
+type InputEdu struct {
+	UserID       string `json:"user_id"`
+	School       string `json:"school"`
+	Degree       string `json:"degree"`
+	FieldOfStudy string `json:"field_of_study"`
+	StartDate    string `json:"start_date"`
+	EndDate      string `json:"end_date"`
+}
+
+type InputExp struct {
+	UserID         string `json:"user_id"`
+	Title          string `json:"title"`
+	EmploymentType string `json:"employment_type"`
+	CompanyName    string `json:"company_name"`
+	Location       string `json:"location"`
+	StartDate      string `json:"start_date"`
+	EndDate        string `json:"end_date"`
+}
+
+type JobPost struct {
+	ID          string `json:"id"`
+	LogoURL     string `json:"logo_url"`
+	CompanyName string `json:"company_name"`
+	JobName     string `json:"job_name"`
+	Location    string `json:"location"`
+}
+
 type LikedComment struct {
-	ID      int      `json:"id"`
-	Comment *Comment `json:"comment"`
-	UserID  string   `json:"user_id"`
+	CommentID string `json:"comment_id"`
+	UserID    string `json:"user_id"`
 }
 
 type LikedPost struct {
-	ID     int    `json:"id"`
-	Post   *Post  `json:"post"`
+	PostID string `json:"post_id"`
 	UserID string `json:"user_id"`
+}
+
+type NewJobPost struct {
+	LogoURL     string `json:"logo_url"`
+	CompanyName string `json:"company_name"`
+	JobName     string `json:"job_name"`
+	Location    string `json:"location"`
 }
 
 type NewUser struct {
@@ -61,11 +115,13 @@ type NewUser struct {
 }
 
 type Post struct {
-	ID          int    `json:"id"`
-	PosterID    string `json:"poster_id"`
+	ID          string `json:"id"`
+	UserID      string `json:"user_id"`
 	ContentText string `json:"content_text"`
-	Photo       string `json:"photo"`
-	Video       string `json:"video"`
+	URL         string `json:"url"`
+	Type        string `json:"type"`
+	Likes       int    `json:"likes"`
+	Comments    int    `json:"comments"`
 }
 
 type UpdateUser struct {
@@ -76,6 +132,5 @@ type UpdateUser struct {
 	ProfilePhoto    string `json:"profile_photo"`
 	BackgroundPhoto string `json:"background_photo"`
 	Headline        string `json:"headline"`
-	Experience      string `json:"experience"`
-	Education       string `json:"education"`
+	Job             string `json:"job"`
 }

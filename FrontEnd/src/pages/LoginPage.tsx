@@ -3,6 +3,7 @@ import { ThemeContext, widthContext } from '../App';
 import '../stylings/login.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { authContext } from '../lib/contexts/authContext';
+import { Audio } from 'react-loader-spinner'
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_CURR_USER, LOGIN } from '../lib/query';
 import { useRef } from 'react';
@@ -15,6 +16,7 @@ export default function LoginPage(){
 
     const {currTheme} = useContext(ThemeContext);
     const {width, setWidth} = useContext(widthContext);
+    const {setId} = useContext(authContext);
     let foreBox = "foreBox";
     let signUp = "signUp";
     let container = "container";
@@ -73,6 +75,7 @@ export default function LoginPage(){
             }
         }).then((data)=>{
             localStorage.setItem('userid', JSON.stringify(data.data.login.id));
+            setId(data.data.login.id);
             navigateTo("/linkhedIn/home");
         }).catch((err)=>{
             setErrorMsg(err.message);
@@ -96,10 +99,18 @@ export default function LoginPage(){
     //       })
     //   }, [])
 
+    
+
     if(redirect === true) {
 
     return <div className={currTheme} id="container">
-         <p id="title">Redirecting...</p>
+         <p id="title">Redirecting</p>
+         <Audio
+            height="80"
+            width="80"
+            color="black"
+            ariaLabel="loading"
+            />
     </div>
     }
     else return <div className={currTheme}>

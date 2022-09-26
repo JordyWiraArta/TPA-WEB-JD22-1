@@ -1,0 +1,30 @@
+@use 'colors.scss' as *;
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0%;
+    margin-top: 20px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    #sub-title{
+        align-self: center;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .links {
+      .link {
+        text-decoration: underline;
+        font-size: 15px;
+      }
+  
+      width: 50%;
+      display: flex;
+      justify-content: space-around;
+    }
+    .copyright {
+      font-size: 13px;
+    }
+  }

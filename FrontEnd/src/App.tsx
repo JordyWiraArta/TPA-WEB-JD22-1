@@ -9,6 +9,7 @@ import HomeNavigation from './pages/HomeNavigation';
 import Activate from './pages/Activate';
 import { AuthProvider } from './lib/contexts/authContext';
 import { SearchProvider } from './lib/contexts/searchContext';
+import Footer from './components/Footer';
 
 export const ThemeContext = createContext<any>({theme: "light"});
 export const widthContext = createContext<any>({});
@@ -59,8 +60,9 @@ function App() {
               <Route path="/linkhedIn/*" element={
               <Fragment>
                 <SearchProvider>
-                  <IndexHeader/>
                   <HomeNavigation/>
+                  <Footer/>
+                  <IndexHeader/>
                 </SearchProvider>
               </Fragment>
               }/>
