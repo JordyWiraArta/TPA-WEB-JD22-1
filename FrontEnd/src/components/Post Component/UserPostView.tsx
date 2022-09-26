@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { GET_CURR_USER } from "../../lib/query";
 
-export const UserPostView: React.FC<{userid:String}> =  ({userid}) =>{
+export const UserPostView: React.FC<{userid:String, type:string}> =  ({userid, type}) =>{
     const {loading, error, data, refetch} = useQuery(GET_CURR_USER, {
         variables:{
             id: userid
@@ -47,8 +47,9 @@ export const UserPostView: React.FC<{userid:String}> =  ({userid}) =>{
 
         </label>
         <div>    
-            <p className="text" id="poster-username">{user !== null ? user.first_name +" " + user.last_name : "Loading.."}</p>
-            <p className="text" id="grey">total follower</p>
+            {type === "post" && <p className="text" id="poster-username">{user !== null ? user.first_name +" " + user.last_name : "Loading.."}</p>}
+            {type === "comment" && <p className="text" id="commenter-username">{user !== null ? user.first_name +" " + user.last_name : "Loading.."}</p>}
+            {type === "post" && <p className="text" id="grey">total follower</p>}
             
         </div>
 

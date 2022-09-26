@@ -1,6 +1,10 @@
 import { useQuery } from "@apollo/client"
+import { useContext } from "react";
+import { searchContext } from "../lib/contexts/searchContext";
+import { GET_CURR_USER } from "../lib/query";
 import { GET_POSTS } from "../lib/queryPost"
 import Hearth from "../lib/symbols/Hearth";
+import { NumberComment } from "../lib/symbols/PostFeatures";
 import { LoadingText } from "./LoadingText";
 import { PostButtons } from "./Post Component/PostButtons";
 import { UserPostView } from "./Post Component/UserPostView";
@@ -18,6 +22,8 @@ export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function
         setFetch(false);
     }
 
+    const {search} = useContext(searchContext);
+    console.log(search);
     if(loading) return <LoadingText/>
     else return <div>
     
@@ -27,16 +33,19 @@ export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function
 
 
         {data.posts.map((post:any, index:number)=>{
-            console.log(post)
-            return <div className="container bg" id="posts-container" key={post.id}>
-                <div className="flex items-center">
-                    <img id="user-icon-posts" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" />
-                    <p className="text" id="likes-username">like's username</p>
-                    <p className="text" id="grey">likes this</p>
-                </div>
-                <hr />
+            let valid = false;
+
+            if(isSearch) {
                 
-                <UserPostView userid={post.user_id}/>
+                if(post.content_text.includes(search))valid = true;
+            }
+            else if(!isSearch) valid = true;
+
+            if(valid) return <div className="container bg" id="posts-container" key={post.id}>
+                
+                <UserPostView userid={post.user_id} type={"post"}/>
+
+                <hr />
                 <div className="content-container">
                     {post.type === "image" && <img id="content-img" src={post.url} alt="" />}
                     {post.type === "video" && <video src={post.url} controls/>}
@@ -44,7 +53,9 @@ export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function
                 </div>
 
                 <div className="info-container">
-                    <p className="text">{post.likes-1}</p>
+                    <p className="text" id="counter">{post.comments-1}</p>
+                    <NumberComment/>
+                    <p className="text" id="counter">{post.likes-1}</p>
                     <Hearth/>
                 </div>
 

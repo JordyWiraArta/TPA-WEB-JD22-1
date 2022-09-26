@@ -4,6 +4,33 @@
     width: 100%;
 }
 
+.poster-container{
+    #poster-username{
+        font-size: 25px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    .profile-info{
+        cursor: pointer;
+        .additional-info{
+            position: absolute;
+            top: unset;
+            background-color: $white;
+            border: solid 2px;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+            z-index: 5;
+            padding: 10px;
+            width: 200px;
+
+            #job{
+                opacity: 0.6;
+            }
+        }
+
+    }
+}
+
 .container{
     
     width: 100%;
@@ -35,32 +62,7 @@
         margin-right: 10px;
     }
 
-    .poster-container{
-        #poster-username{
-            font-size: 25px;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-        .profile-info{
-            cursor: pointer;
-            .additional-info{
-                position: absolute;
-                top: unset;
-                background-color: $white;
-                border: solid 2px;
-                border-radius: 20px;
-                box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4);
-                z-index: 5;
-                padding: 10px;
-                width: 200px;
-
-                #job{
-                    opacity: 0.6;
-                }
-            }
-
-        }
-    }
+    
 
 
     #content-img{
@@ -107,8 +109,17 @@
         align-items: center;
         justify-content: flex-end;
         padding: 10px;
+
+        #counter{
+            margin-left: 5px;
+        }
         .icon-hearth{
+            margin-left: 5px;
             height: 30px;
+        }
+
+        .icon-comments{
+            @extend .icon-hearth;
         }
     }
 }

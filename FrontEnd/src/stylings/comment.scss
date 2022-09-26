@@ -1,0 +1,203 @@
+@use 'colors.scss' as *;
+
+.comment-container{
+    
+    .create-container{
+        display: flex;
+        padding-left: 20px;
+        padding-right: 20px;
+        justify-content: space-between;
+
+        #comment-input{
+            width: 70%;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 17px;
+        }
+
+        #btn-add{
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border: solid;
+            border-radius: 30px;
+            cursor: pointer;
+
+
+            &:hover{
+                background-color: $white-hover;
+            }
+
+            #add{
+                height: 30px;
+            }
+
+            
+        }
+    }
+
+    .comment-content{
+        margin-top: 10px;
+        border: solid 1px;
+        padding: 10px;
+        border-radius: 20px;
+        z-index: 5;
+
+        .header-comment{
+            display: flex;
+            justify-content: space-between;
+
+            .like-counter{
+                display: flex;
+                align-items: center;
+                .icon-likes{
+                    cursor: pointer;
+                    height: 30px;
+                }
+
+                .icon-liked{
+                    cursor: pointer;
+                    height: 30px;
+                    filter: invert(22%) sepia(68%) saturate(7476%) hue-rotate(356deg) brightness(110%) contrast(125%);
+                }
+            }
+        }
+
+
+        .footer-comment{
+            display: flex;
+            justify-content: space-between;
+            #btn-reply{
+                display: flex;
+                align-items: center;
+                padding: 5px;
+                cursor: pointer;
+                #reply{
+                    margin-left: 5px;
+                    height: 30px;
+                }
+
+                &:hover{
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .reply-container{
+            margin-top: 20px;
+            #title{
+                border: solid 1px;
+                border-radius: 40px;
+                width: fit-content;
+                padding: 5px;
+                font-size: 12px;
+                font-weight: 700;
+                opacity: 0.8;
+            }
+
+            .reply-content{
+                margin-top: 30px;
+                padding-left: 30px;
+            }
+        }
+    }
+
+    #btn-load-more{
+        margin-top: 5px;
+        border: solid $linkedInBlue;
+        border-radius: 20px;
+        width: fit-content;
+        padding: 5px;
+        color: $linkedInBlue;
+        cursor: pointer;
+
+        &:hover{
+            background-color: $white-hover;
+        }
+    }
+
+    .btn-div{
+        display: flex;
+        justify-content: end;
+        #btn-reply-more{
+            @extend #btn-load-more;
+            font-size: 10px;
+            justify-self: end;
+        }
+    }
+
+}
+
+.dark{
+    .comment-container{
+    
+        .create-container{
+    
+            #comment-input{
+                background-color: $white-hover;
+            }
+    
+            #btn-add{
+                border: solid $white;
+    
+                &:hover{
+                    background-color: $dark;
+                }
+    
+                #add{
+                    filter: invert(90%) sepia(56%) saturate(0%) hue-rotate(146deg) brightness(109%) contrast(101%);
+                }
+    
+                
+            }
+        }
+    
+        .comment-content{
+            border: solid $white;
+            .header-comment{
+    
+                .like-counter{
+    
+                    .icon-likes{
+                        filter: invert(90%) sepia(56%) saturate(0%) hue-rotate(146deg) brightness(109%) contrast(101%);
+                    }
+                }
+            }
+    
+    
+            .footer-comment{
+                #btn-reply{
+                    cursor: pointer;
+                    #reply{
+                        filter: invert(90%) sepia(56%) saturate(0%) hue-rotate(146deg) brightness(109%) contrast(101%);
+                    }
+    
+                    &:hover{
+                        opacity: 0.5;
+                    }
+                }
+            }
+
+            .reply-container{
+                #title{
+                    border: solid $white 1px;
+                }
+            }
+        }
+    
+        #btn-load-more{
+            margin-top: 5px;
+            border: solid $linkedInBlue;
+            border-radius: 20px;
+            width: fit-content;
+            padding: 5px;
+            color: $linkedInBlue;
+            cursor: pointer;
+    
+            &:hover{
+                background-color: $white-hover;
+            }
+        }
+    
+    }
+}

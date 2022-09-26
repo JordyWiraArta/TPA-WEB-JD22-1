@@ -17,6 +17,7 @@ query getPost($limit:Int!){
     type
     url
     likes
+    comments
     }
   }
 `
@@ -64,3 +65,71 @@ mutation unlike($userid:ID!, $postid:ID!){
   }
 }
 `
+
+export const CREATE_COMMENT = gql`
+mutation createComment($userid:ID!, $postid:ID!, $content:String!){
+  createComment(user_id:$userid, post_id:$postid, content:$content){
+    id
+  }
+}
+`
+
+export const CREATE_REPLY = gql`
+mutation createReply($userid:ID!, $postid:ID!, $content:String!, $commentid:ID!){
+  createReplyComment(user_id:$userid, post_id:$postid, content:$content, comment_id:$commentid){
+    id
+  }
+}
+`
+
+export const GET_COMMENTS = gql`
+query getComments($postid:ID!, $limit:Int!){
+  comments(post_id:$postid, number:$limit){
+    id
+    post_id
+    content
+    user_id
+    reply_id
+    likes
+  }
+}
+`
+
+export const GET_REPLY = gql`
+query getReply($postid:ID!, $commentid:ID!, $limit:Int!){
+  replyComments(post_id:$postid, comment_id:$commentid, number:$limit){
+    id
+    post_id
+    content
+    user_id
+    reply_id
+    likes
+  }
+}
+`
+
+export const LIKE_COMMENT = gql`
+mutation likingComment($userid:ID!, $commentid:ID!){
+  likeComment(user_id:$userid, comment_id:$commentid){
+    comment_id
+  }
+}
+`
+
+export const UNLIKE_COMMENT = gql`
+mutation unlikingComment($userid:ID!, $commentid:ID!){
+  unlikeComment(user_id:$userid, comment_id:$commentid){
+    comment_id
+  }
+}
+`
+
+export const GET_LIKED_COMMENT = gql`
+query getLikedComment($userid:ID!, $commentid:ID!){
+  likedComments(user_id:$userid, comment_id:$commentid){
+    user_id
+  }
+}
+`
+
+

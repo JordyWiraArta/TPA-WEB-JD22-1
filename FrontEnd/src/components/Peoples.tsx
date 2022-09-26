@@ -1,4 +1,7 @@
 export const Peoples: React.FC<{}> = ({})=>{
+
+
+    
     return <div className="container bg" id="peoples-container">
        <p className="text" id="title">People</p>
        <div className="flex" id="people">

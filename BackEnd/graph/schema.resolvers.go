@@ -504,7 +504,7 @@ func (r *queryResolver) UserExperiences(ctx context.Context, userID string) ([]*
 // Comments is the resolver for the comments field.
 func (r *queryResolver) Comments(ctx context.Context, postID string, number int) ([]*model.Comment, error) {
 	var comments []*model.Comment
-	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, "").Limit(number).Find(&comments).Error
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, "").Limit(number).Order("id asc").Find(&comments).Error
 
 	return comments, err
 }
@@ -512,7 +512,7 @@ func (r *queryResolver) Comments(ctx context.Context, postID string, number int)
 // ReplyComments is the resolver for the replyComments field.
 func (r *queryResolver) ReplyComments(ctx context.Context, postID string, commentID string, number int) ([]*model.Comment, error) {
 	var comments []*model.Comment
-	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, commentID).Limit(number).Find(&comments).Error
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, commentID).Limit(number).Order("id asc").Find(&comments).Error
 
 	return comments, err
 }

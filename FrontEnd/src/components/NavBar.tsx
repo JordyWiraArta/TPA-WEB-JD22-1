@@ -39,7 +39,9 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, u
                 {width<800 && !show && <Search setShow={setShow} show={show}/>}
                 {(width>800 || show) && <div id="searchBar">
                     <Search setShow={setShow} show={show}/>
-                    <input onClick={()=>{setIsSearch(true)}} className="text" id="input" type="text" placeholder="search" />
+                    <input onClick={()=>{setIsSearch(true)}} className="text" id="input" type="text" placeholder="search" onChange={(e)=>{
+                        setSearch(e.target.value);
+                    }} />
                 </div>}
             </div>
 
@@ -91,10 +93,12 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, u
                 </Link>}
                 
                 {width > 800 && <div className="dropdown">
-                    {imgUrl === ""? <Profile/>: <img className="icon-nav" id="profile" src={imgUrl}/>}
-                    <div className="center-row"> 
-                        <p className="text" id="label">{username !== "" ? username : "Loading"}</p>
-                        <DownArrow/>
+                    <div className="center-row">
+                        {imgUrl === ""? <Profile/>: <img className="icon-nav" id="profile" src={imgUrl}/>}
+                        <div className="center-row"> 
+                            <p className="text" id="label">{username !== "" ? username : "Loading"}</p>
+                            <DownArrow/>
+                        </div>
                     </div>
 
                     <div className="content-box">

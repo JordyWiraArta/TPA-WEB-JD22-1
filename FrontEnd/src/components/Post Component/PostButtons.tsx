@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { useState } from "react"
 import { GET_LIKED, LIKES, UNLIKE } from "../../lib/queryPost"
 import { Comment, Like, Liked, Send, Share } from "../../lib/symbols/PostFeatures"
+import { CommentComponent } from "./Comment"
 
 export const PostButtons: React.FC<{user:any, post:any, setFetch:Function}> = ({user, post, setFetch})=>{
 
@@ -11,6 +12,8 @@ export const PostButtons: React.FC<{user:any, post:any, setFetch:Function}> = ({
             postid: post.id
         }
     })
+
+    const [showComment, setShowComment] = useState(false);
 
     const [like, setLike] = useState<any>(undefined)
 
@@ -49,27 +52,32 @@ export const PostButtons: React.FC<{user:any, post:any, setFetch:Function}> = ({
         }
     }
 
-    return <div className="buttons flex">
-    <div className="flex items-center" id="btn" onClick={handleLike}>
-        {like ? <Liked/> : <Like/>}
-        <p className="text">Like</p>
-    </div>
+    return <div className="footer-post">
+        <div className="buttons flex">
+            <div className="flex items-center" id="btn" onClick={handleLike}>
+                {like ? <Liked/> : <Like/>}
+                <p className="text">Like</p>
+            </div>
 
-    <div className="flex items-center" id="btn">
-        <Comment/>
-        <p className="text">Comment</p>
-    </div>
+            <div className="flex items-center" id="btn" onClick={()=> {
+                if(showComment) setShowComment(false);
+                else setShowComment(true);
+                }}>
+                <Comment/>
+                <p className="text">Comment</p>
+            </div>
 
-    <div className="flex items-center" id="btn">
-        <Share/>
-        <p className="text">Share</p>
-    </div>
+            <div className="flex items-center" id="btn">
+                <Share/>
+                <p className="text">Share</p>
+            </div>
 
-    <div className="flex items-center" id="btn">
-        <Send/>
-        <p className="text">Send</p>
-    </div>
-    
+            <div className="flex items-center" id="btn">
+                <Send/>
+                <p className="text">Send</p>
+            </div>
+        </div>
 
-</div>
+        {showComment && <CommentComponent user={user} post={post}/>}
+    </div> 
 }
