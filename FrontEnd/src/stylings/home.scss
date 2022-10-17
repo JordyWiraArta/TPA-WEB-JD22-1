@@ -27,7 +27,11 @@
                 opacity: 0.6;
             }
         }
+    }
 
+    .connection-container{
+        display: flex;
+        justify-content: space-between;
     }
 }
 

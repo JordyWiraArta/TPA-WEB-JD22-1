@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     overflow-y: scroll;
-
+    z-index: 5;
 }
 
 .modal-post{
@@ -218,11 +218,18 @@
         width: 100%;
         #input-label{
             margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            font-weight: 500;
         }
         .input-update{
             width: 95%;
             padding: 5px;
             font-size: 20px;
+        }
+
+        .area{
+            resize: none;
         }
     }
 

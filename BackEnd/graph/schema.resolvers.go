@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jordywiraarta/golang-graphql/database"
@@ -38,6 +39,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 				Job:             "",
 				IsActive:        false,
 				ActiveCode:      uuid.NewString(),
+				Followers:       1,
+				Views:           1,
 			}
 
 			err := r.DB.Create(user).Error
@@ -154,6 +157,24 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, code strin
 		}).Error
 		return user, err
 	}
+}
+
+// AddViewUser is the resolver for the addViewUser field.
+func (r *mutationResolver) AddViewUser(ctx context.Context, userID string) (*model.User, error) {
+	db := database.GetDB()
+	var user model.User
+	err1 := db.Model(user).Where("id LIKE ?", userID).Take(&user).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberView := user.Views + 1
+	err2 := db.Model(&user).Where("id like ?", userID).Updates(model.User{
+		Views: numberView,
+	}).Error
+
+	
+	return &user, err2;
 }
 
 // AddEdu is the resolver for the addEdu field.
@@ -282,6 +303,7 @@ func (r *mutationResolver) CreatePost(ctx context.Context, userID string, typeAr
 		Type:        typeArg,
 		Likes:       1,
 		Comments:    1,
+		CreateAt:    time.Now(),
 	}
 
 	err := r.DB.Create(&post).Error
@@ -374,12 +396,13 @@ func (r *mutationResolver) CreateComment(ctx context.Context, userID string, pos
 	}
 
 	comment := &model.Comment{
-		ID:      uuid.NewString(),
-		UserID:  userID,
-		Content: content,
-		PostID:  postID,
-		ReplyID: "",
-		Likes:   1,
+		ID:       uuid.NewString(),
+		UserID:   userID,
+		Content:  content,
+		PostID:   postID,
+		ReplyID:  "",
+		Likes:    1,
+		CreateAt: time.Now(),
 	}
 
 	err := r.DB.Create(&comment).Error
@@ -389,13 +412,31 @@ func (r *mutationResolver) CreateComment(ctx context.Context, userID string, pos
 
 // CreateReplyComment is the resolver for the createReplyComment field.
 func (r *mutationResolver) CreateReplyComment(ctx context.Context, userID string, postID string, commentID string, content string) (*model.Comment, error) {
+	db := database.GetDB()
+
 	comment := &model.Comment{
-		ID:      uuid.NewString(),
-		UserID:  userID,
-		Content: content,
-		PostID:  postID,
-		ReplyID: commentID,
-		Likes:   1,
+		ID:       uuid.NewString(),
+		UserID:   userID,
+		Content:  content,
+		PostID:   postID,
+		ReplyID:  commentID,
+		Likes:    1,
+		CreateAt: time.Now(),
+	}
+
+	var post model.Post
+	err1 := db.Model(post).Where("id LIKE ?", postID).Take(&post).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberComments := post.Comments + 1
+	err2 := db.Model(&post).Where("id like ?", postID).Updates(model.Post{
+		Comments: numberComments,
+	}).Error
+
+	if err2 != nil {
+		return nil, err2
 	}
 
 	err := r.DB.Create(&comment).Error
@@ -404,7 +445,6 @@ func (r *mutationResolver) CreateReplyComment(ctx context.Context, userID string
 
 // LikeComment is the resolver for the likeComment field.
 func (r *mutationResolver) LikeComment(ctx context.Context, userID string, commentID string) (*model.LikedComment, error) {
-
 	db := database.GetDB()
 
 	var comment model.Comment
@@ -418,13 +458,13 @@ func (r *mutationResolver) LikeComment(ctx context.Context, userID string, comme
 		Likes: numberLike,
 	}).Error
 
-	if err2 != nil{
+	if err2 != nil {
 		return nil, err2
 	}
 
 	likeComment := &model.LikedComment{
-		UserID:		userID,
-		CommentID:	commentID,
+		UserID:    userID,
+		CommentID: commentID,
 	}
 
 	err := r.DB.Create(&likeComment).Error
@@ -447,7 +487,7 @@ func (r *mutationResolver) UnlikeComment(ctx context.Context, userID string, com
 		Likes: numberLike,
 	}).Error
 
-	if err2 != nil{
+	if err2 != nil {
 		return nil, err2
 	}
 
@@ -457,10 +497,134 @@ func (r *mutationResolver) UnlikeComment(ctx context.Context, userID string, com
 	return &likedComment, err
 }
 
+// Follow is the resolver for the follow field.
+func (r *mutationResolver) Follow(ctx context.Context, userID string, followID string) (*model.FollowedUser, error) {
+	db := database.GetDB()
+	followUser := &model.FollowedUser{
+		UserID:     userID,
+		FollowedID: followID,
+	}
+
+	var user model.User
+	err1 := db.Model(user).Where("id LIKE ?", followID).Take(&user).Error
+	if err1 != nil {
+		return nil, err1
+	}
+
+	numberFollow := user.Followers + 1
+	err2 := db.Model(&user).Where("id like ?", followID).Updates(model.User{
+		Followers: numberFollow,
+	}).Error
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+	err := r.DB.Create(&followUser).Error
+
+	return followUser, err
+}
+
+// SendInvitation is the resolver for the sendInvitation field.
+func (r *mutationResolver) SendInvitation(ctx context.Context, userID string, connectingID string, message string) (*model.ConnectInvitation, error) {
+	inviteMail := &model.ConnectInvitation{
+		ID:        uuid.NewString(),
+		UserSrcID: userID,
+		UserDstID: connectingID,
+		Message:   message,
+	}
+
+	err := r.DB.Create(&inviteMail).Error
+
+	return inviteMail, err
+}
+
+// Connect is the resolver for the connect field.
+func (r *mutationResolver) Connect(ctx context.Context, userID string, connectedID string) (*model.Connection, error) {
+	db := database.GetDB()
+	connect := &model.Connection{
+		UserID:      userID,
+		ConnectedID: connectedID,
+	}
+
+	var connectInvitation model.ConnectInvitation
+	err2 := db.Where("(user_src_id LIKE ? AND user_dst_id LIKE ?) OR (user_dst_id LIKE ? AND user_src_id LIKE ?)", userID, connectedID, userID, connectedID).Delete(&connectInvitation).Error
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+	var invitation model.ConnectInvitation
+	err1 := db.Where("(user_src_id LIKE ? AND user_dst_id LIKE ?)", connectedID, userID).Delete(&invitation).Error
+
+	if err1 != nil {
+		return nil, err1
+	}
+
+	err := r.DB.Create(&connect).Error
+	return connect, err
+}
+
+// RejectInvitation is the resolver for the rejectInvitation field.
+func (r *mutationResolver) RejectInvitation(ctx context.Context, id string) (*model.ConnectInvitation, error) {
+	db := database.GetDB()
+	var connectInvitation model.ConnectInvitation
+	err := db.Where("id like ?", id).Delete(&connectInvitation).Error
+
+	return &connectInvitation, err
+}
+
+// AddNotification is the resolver for the addNotification field.
+func (r *mutationResolver) AddNotification(ctx context.Context, srcID string, content string) (*model.Notification, error) {
+	// db := database.GetDB()
+
+	var connections []*model.Connection
+	err1 := r.DB.Where("user_id like ? OR connected_id like ?", srcID, srcID).Find(&connections).Error
+	if err1 != nil {
+		return nil, err1;
+	} 
+
+	for index, conn := range connections{
+		fmt.Print(index)
+		if conn.ConnectedID == srcID {
+			notif := &model.Notification{
+				SrcID: srcID,
+				UserID: conn.UserID,
+				Content: content,
+			}
+
+			err2:= r.DB.Create(notif).Error
+			if err2 != nil {
+				return nil, err2
+			}
+		} else {
+			notif := &model.Notification{
+				SrcID: srcID,
+				UserID: conn.ConnectedID,
+				Content: content,
+			}
+			err2:= r.DB.Create(notif).Error
+			if err2 != nil {
+				return nil, err2
+			}
+		}
+	}
+
+	notif := &model.Notification{
+		SrcID: srcID,
+		UserID: srcID,
+		Content: content,
+	}
+	
+	err:= r.DB.Create(notif).Error
+
+	return notif, err;
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	var users []*model.User
-	err := r.DB.Find(&users).Error
+	err := r.DB.Where("is_active = true").Find(&users).Error
 
 	return users, err
 }
@@ -476,13 +640,26 @@ func (r *queryResolver) CurrUser(ctx context.Context, userID string) (*model.Use
 // Posts is the resolver for the posts field.
 func (r *queryResolver) Posts(ctx context.Context, number int) ([]*model.Post, error) {
 	var posts []*model.Post
-	err := r.DB.Limit(number).Order("id asc").Find(&posts).Error
+	err := r.DB.Limit(number).Order("create_at desc").Find(&posts).Error
 	return posts, err
 }
 
 // UserInvitations is the resolver for the userInvitations field.
-func (r *queryResolver) UserInvitations(ctx context.Context, userID string) ([]*model.ConnectInvitation, error) {
-	panic(fmt.Errorf("not implemented: UserInvitations - userInvitations"))
+func (r *queryResolver) UserInvitations(ctx context.Context, userID string, dstID string) ([]*model.ConnectInvitation, error) {
+	var invitations []*model.ConnectInvitation
+
+	err := r.DB.Where("user_dst_id like ? AND user_src_id like ?", dstID, userID).Find(&invitations).Error
+
+	return invitations, err
+}
+
+// MyInvitations is the resolver for the myInvitations field.
+func (r *queryResolver) MyInvitations(ctx context.Context, dstID string) ([]*model.ConnectInvitation, error) {
+	var invitations []*model.ConnectInvitation
+
+	err := r.DB.Where("user_dst_id like ?", dstID).Find(&invitations).Error
+
+	return invitations, err
 }
 
 // UserEducations is the resolver for the userEducations field.
@@ -504,7 +681,7 @@ func (r *queryResolver) UserExperiences(ctx context.Context, userID string) ([]*
 // Comments is the resolver for the comments field.
 func (r *queryResolver) Comments(ctx context.Context, postID string, number int) ([]*model.Comment, error) {
 	var comments []*model.Comment
-	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, "").Limit(number).Order("id asc").Find(&comments).Error
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, "").Limit(number).Order("create_at desc").Find(&comments).Error
 
 	return comments, err
 }
@@ -512,7 +689,7 @@ func (r *queryResolver) Comments(ctx context.Context, postID string, number int)
 // ReplyComments is the resolver for the replyComments field.
 func (r *queryResolver) ReplyComments(ctx context.Context, postID string, commentID string, number int) ([]*model.Comment, error) {
 	var comments []*model.Comment
-	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, commentID).Limit(number).Order("id asc").Find(&comments).Error
+	err := r.DB.Where("post_id like ? AND reply_id = ?", postID, commentID).Limit(number).Order("create_at desc").Find(&comments).Error
 
 	return comments, err
 }
@@ -527,17 +704,29 @@ func (r *queryResolver) LikedComments(ctx context.Context, userID string, commen
 
 // Follows is the resolver for the follows field.
 func (r *queryResolver) Follows(ctx context.Context, userID string) ([]*model.FollowedUser, error) {
-	panic(fmt.Errorf("not implemented: Follows - follows"))
+	var follows []*model.FollowedUser
+
+	err := r.DB.Where("user_id LIKE ?", userID).Find(&follows).Error
+
+	return follows, err
 }
 
 // Followers is the resolver for the followers field.
 func (r *queryResolver) Followers(ctx context.Context, userID string) ([]*model.FollowedUser, error) {
-	panic(fmt.Errorf("not implemented: Followers - followers"))
+	var followers []*model.FollowedUser
+
+	err := r.DB.Where("followed_id LIKE ?", userID).Find(&followers).Error
+
+	return followers, err
 }
 
 // Connects is the resolver for the connects field.
 func (r *queryResolver) Connects(ctx context.Context, userID string) ([]*model.Connection, error) {
-	panic(fmt.Errorf("not implemented: Connects - connects"))
+	var connects []*model.Connection
+
+	err := r.DB.Where("user_id LIKE ? OR connected_id LIKE ?", userID, userID).Find(&connects).Error
+
+	return connects, err
 }
 
 // Connectors is the resolver for the connectors field.
@@ -561,6 +750,15 @@ func (r *queryResolver) LikedPosts(ctx context.Context, userID string, postID st
 	return likedPosts, err
 }
 
+// MyNotifications is the resolver for the myNotifications field.
+func (r *queryResolver) MyNotifications(ctx context.Context, userID string) ([]*model.Notification, error) {
+	var notifications []*model.Notification
+	err := r.DB.Where("user_id like ?", userID).Find(&notifications).Error
+
+	return notifications, err
+}
+
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
@@ -569,6 +767,7 @@ func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
 
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have

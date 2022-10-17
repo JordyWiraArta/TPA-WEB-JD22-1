@@ -10,6 +10,7 @@ import Activate from './pages/Activate';
 import { AuthProvider } from './lib/contexts/authContext';
 import { SearchProvider } from './lib/contexts/searchContext';
 import Footer from './components/Footer';
+import { FetchProvider } from './lib/contexts/fetchContext';
 
 export const ThemeContext = createContext<any>({theme: "light"});
 export const widthContext = createContext<any>({});
@@ -60,9 +61,11 @@ function App() {
               <Route path="/linkhedIn/*" element={
               <Fragment>
                 <SearchProvider>
-                  <HomeNavigation/>
-                  <Footer/>
-                  <IndexHeader/>
+                  <FetchProvider>
+                    <HomeNavigation/>
+                    <Footer/>
+                    <IndexHeader/>
+                  </FetchProvider>
                 </SearchProvider>
               </Fragment>
               }/>

@@ -9,6 +9,7 @@ import { ThemeContext } from '../../App'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '../../firebase'
 import { CREATE_POST } from '../../lib/queryPost'
+import { CREATE_NOTIF } from '../../lib/queryNotifMsg'
 
 export const CreatePostModal: React.FC<{setOpen:Function, user:any, setFetch:Function}> = ({setOpen, user, setFetch})=>{
 
@@ -22,6 +23,12 @@ export const CreatePostModal: React.FC<{setOpen:Function, user:any, setFetch:Fun
     const [imageUrl, setImageUrl] = useState("");
     const [videoUrl, setVideoUrl] = useState("");
     const [createPost] = useMutation(CREATE_POST);
+    const [addNotif] = useMutation(CREATE_NOTIF, {
+        variables:{
+            src_id: user.id,
+            content: "Has Created a new post!"
+        }
+    })
     
 
     let hashTag = [
@@ -200,6 +207,7 @@ export const CreatePostModal: React.FC<{setOpen:Function, user:any, setFetch:Fun
             content: postText,
             url: url,
         }}).then(()=>{
+            addNotif();
             setOpen(false);
             setFetch(true);
         }).catch((err)=>{

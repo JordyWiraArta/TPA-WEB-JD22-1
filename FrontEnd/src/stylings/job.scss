@@ -21,7 +21,7 @@
         cursor: pointer;
 
         background-color: transparent;
-        :active{
+        &:hover{
             background-color: $linkedInBlue;
         }
     }

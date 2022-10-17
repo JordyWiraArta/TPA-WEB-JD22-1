@@ -5,7 +5,6 @@ import "../stylings/footer.scss";
 
 export default function Footer() {
   const {currTheme} = useContext(ThemeContext);
-
   return (
     <div className={currTheme}>
         <div className="footer bg">

@@ -1,8 +1,6 @@
-import { useState } from "react"
-import { CreatePostModal } from "./CreatePostModal";
-
 export const CreatePost: React.FC<{user:any, setOpen:Function}> = ({user, setOpen})=>{
 
+   
 
     return <div className="container flex items-center bg" id="create-post">
 

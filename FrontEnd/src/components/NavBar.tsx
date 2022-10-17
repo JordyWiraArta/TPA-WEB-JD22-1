@@ -94,7 +94,7 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, u
                 
                 {width > 800 && <div className="dropdown">
                     <div className="center-row">
-                        {imgUrl === ""? <Profile/>: <img className="icon-nav" id="profile" src={imgUrl}/>}
+                        {imgUrl === ""? <Profile/>: <img className="nav-profile-photo" id="profile" src={imgUrl}/>}
                         <div className="center-row"> 
                             <p className="text" id="label">{username !== "" ? username : "Loading"}</p>
                             <DownArrow/>
@@ -104,7 +104,7 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, u
                     <div className="content-box">
                         <div className="dropdown-content">
                             <div className="content-item" >
-                                <Link className="text" id="view-profile" to="/linkhedIn/profile">
+                                <Link className="text" id="view-profile" to="/linkhedIn/profile/my">
                                 {width >1300 && "View Profile"}
                                 {width <1300 && "Profile"}
                                 </Link>
@@ -121,7 +121,7 @@ export const NavBar: React.FC<{ nav:string, setSearch: Function, width:number, u
                 {
                     width<800 && <div className="dropdown-content center-all">
                         <div className="content-item" >
-                            <Link className="text" id="view-profile" to="/linkhedIn/profile">
+                            <Link className="text" id="view-profile" to="/linkhedIn/profile/my">
                             Profile
                             </Link>
                         </div>

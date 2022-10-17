@@ -14,7 +14,7 @@ export default function HomeNavigation(){
             <Route path="/home" element={
             <Home/>
             }/>
-            <Route path="/profile" element={
+            <Route path="/profile/:otherid" element={
                 <Profile/>
             }/>
 

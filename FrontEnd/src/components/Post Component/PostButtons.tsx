@@ -78,6 +78,6 @@ export const PostButtons: React.FC<{user:any, post:any, setFetch:Function}> = ({
             </div>
         </div>
 
-        {showComment && <CommentComponent user={user} post={post}/>}
+        {showComment && <CommentComponent user={user} post={post} setFetchPost={setFetch}/>}
     </div> 
 }

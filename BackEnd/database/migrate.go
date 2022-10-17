@@ -12,4 +12,8 @@ func MigrateTable() {
 	db.AutoMigrate(&model.JobPost{})
 	db.AutoMigrate(&model.LikedPost{})
 	db.AutoMigrate(&model.LikedComment{});
+	db.AutoMigrate(&model.FollowedUser{});
+	db.AutoMigrate(&model.ConnectInvitation{});
+	db.AutoMigrate(&model.Connection{});
+	db.AutoMigrate(&model.Notification{});
 }

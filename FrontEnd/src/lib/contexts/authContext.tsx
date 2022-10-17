@@ -9,9 +9,10 @@ export const authContext = createContext<any>({});
 
 export const AuthProvider: React.FC<{children:any}> = ({children}) => {
     
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const [id, setId] = useState("");
 
+    
     useEffect(()=>{
         if(localStorage.getItem('userid') !== null && id === ""){
             setId(JSON.parse(localStorage.getItem('userid')!));
@@ -22,11 +23,11 @@ export const AuthProvider: React.FC<{children:any}> = ({children}) => {
 
     }, [id])
     
+        return <authContext.Provider value={{setId,id:id}}>
+            {children}
+        </authContext.Provider>
 
    
 
-    return <authContext.Provider value={{setId,id:id}}>
-        {children}
-    </authContext.Provider>
 }
 

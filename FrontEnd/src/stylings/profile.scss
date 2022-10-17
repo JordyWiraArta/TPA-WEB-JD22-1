@@ -88,9 +88,42 @@
         }
     }
 
+    .views{
+        padding: 15px;
+
+        #view-text{
+            text-align: right;
+            font-size: 18px;
+        }
+    }
+
     #profile-icon{
         @extend #user-icon;
         width: 100px;
+    }
+
+    .useful-btn{
+        margin: 30px;
+        display: flex;
+        .btn{
+            cursor: pointer;
+            width: fit-content;
+            border: solid $linkedInBlue;
+            border-radius: 20px;
+            padding: 10px;
+
+            &:hover{
+                background-color: $linkedInBlue;
+            }
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        #followed{
+            cursor:grab;
+
+            background-color: $linkedInBlue;
+        }
     }
     
 }

@@ -4,7 +4,7 @@ import { GET_EDUCATION, GET_EXPERIENCE } from "../lib/queryProfile"
 import { Add } from "../lib/symbols/add"
 import { Edit } from "../lib/symbols/Edit"
 
-export const Education: React.FC<{setOpen:Function, id:string, fetch: Boolean, setFetch: Function, setUpd:Function}> = ({setOpen, id, fetch, setFetch, setUpd}) =>{
+export const Education: React.FC<{setOpen:Function, id:string, fetch: Boolean, setFetch: Function, setUpd:Function, edits:boolean}> = ({setOpen, id, fetch, setFetch, setUpd, edits}) =>{
         const {loading, data, error, refetch} = useQuery(GET_EDUCATION, {variables:{
             id:id
         }});
@@ -24,10 +24,10 @@ export const Education: React.FC<{setOpen:Function, id:string, fetch: Boolean, s
     return <div className="profile-component bg">
         <div className="header-component">
             <p className="text" id="sub-title">Education</p>
-            <div id="btn-add"
+            {edits && <div id="btn-add"
             onClick={()=> setOpen(true)}>
                 <Add/>
-            </div>
+            </div>}
         </div>
 
         <div className="item-component">

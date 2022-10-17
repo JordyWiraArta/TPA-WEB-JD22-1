@@ -6,21 +6,22 @@ import { Liked, Likes } from "../../lib/symbols/Hearth"
 import "../../stylings/comment.scss"
 import { UserPostView } from "./UserPostView"
 
-export const CommentComponent: React.FC<{user:any, post:any}> = ({user, post})=>{
+export const CommentComponent: React.FC<{user:any, post:any, setFetchPost:Function}> = ({user, post, setFetchPost})=>{
 
     const [addComment] = useMutation(CREATE_COMMENT);
     const [limit, setLimit] = useState(2);
+    const [max, setMax] = useState(false);
     const [fetch, setFetch] = useState(false);
     const {loading, error, data, refetch} = useQuery(GET_COMMENTS, {variables:{
         postid:post.id,
-        limit:limit,
+        limit:50,
     }})
 
     if(fetch){
         refetch();
-        setFetch(false);
+        setFetchPost(true);
+        // setFetch(false);
     }
-
     const contentRef = useRef<HTMLInputElement>(null);
 
     function handleAddComment(){
@@ -37,6 +38,7 @@ export const CommentComponent: React.FC<{user:any, post:any}> = ({user, post})=>
             content:contentText
         }}).then(()=>{
             refetch();
+            setFetchPost(true);
             
         }).catch((err)=>{
             console.log(err)
@@ -54,21 +56,20 @@ export const CommentComponent: React.FC<{user:any, post:any}> = ({user, post})=>
             </div>
         </div>
 
-        {!loading && data.comments.map((comment:any)=>{
-            return <Comment comment={comment} user={user} setFetch={setFetch}/>
+        {!loading && data.comments.map((comment:any, index:number)=>{
+            if(index < limit) return <Comment key={comment.id} comment={comment} user={user} setFetch={setFetch} fetch={fetch}/>
         })}
 
         {loading && <div>loading..</div>}
-        {!loading && limit <= post.comments && <div className="text" id="btn-load-more" onClick={()=>{
-            let newLimit = limit + 2;
+        {!loading && limit < data.comments.length && <div className="text" id="btn-load-more" onClick={()=>{
+            let newLimit = limit+2;
             setLimit(newLimit);
-            refetch();
         }}>Load More</div>}
     </div>
 }
 
 
-const Comment:React.FC<{comment:any, user:any, setFetch:Function}> = ({comment, user, setFetch})=>{
+const Comment:React.FC<{comment:any, user:any, setFetch:Function, fetch:boolean}> = ({comment, user, setFetch, fetch})=>{
     const [likeComment] = useMutation(LIKE_COMMENT);
     const [unlikeComment] = useMutation(UNLIKE_COMMENT);
     const [show, setShow] = useState(false);
@@ -133,8 +134,8 @@ const Comment:React.FC<{comment:any, user:any, setFetch:Function}> = ({comment, 
             content:contentText,
             commentid:comment.id,
         }}).then(()=>{
+            setFetch(true);
             setFetchReply(true);
-            
         }).catch((err)=>{
             console.log(err)
         })
@@ -170,18 +171,18 @@ const Comment:React.FC<{comment:any, user:any, setFetch:Function}> = ({comment, 
                 <Add/>
             </div>
         </div>}
-        <Replys comment={comment} fetch={fetchReply} setFetch={setFetchReply}/>
+        <Replys comment={comment} fetch={fetch} setFetch={setFetch} user={user}/>
     </div>
 }
 
-const Replys:React.FC<{comment:any,fetch:boolean, setFetch:Function}> = ({comment, fetch, setFetch})=>{
+const Replys:React.FC<{comment:any,fetch:boolean, setFetch:Function, user:any}> = ({comment, fetch, setFetch, user})=>{
 
     const [limit, setLimit] = useState(1);
 
     const {loading, data, error, refetch} = useQuery(GET_REPLY,{variables:{
         postid: comment.post_id,
         commentid: comment.id,
-        limit:limit
+        limit:50
     }});
 
     if(fetch){
@@ -190,80 +191,17 @@ const Replys:React.FC<{comment:any,fetch:boolean, setFetch:Function}> = ({commen
     }
 
     return <div className="reply-container">
-        <p className="text" id="title">Replys</p>
-        {!loading && data.replyComments.map((reply:any)=>{
-            return <ReplyItem reply={reply} setFetch={setFetch}/>
+        {!loading && data.replyComments.length > 0 && <p className="text" id="title">Replys</p>}
+        {!loading && data.replyComments.map((reply:any, index:number)=>{
+           if(index < limit) return <Comment key={reply.id} comment={reply} user={user} setFetch={setFetch} fetch={fetch}/>
         })}
 
         {loading && <div>loading..</div>}
         <div className="btn-div">
-            {!loading && data.replyComments.length >0 && <div className="text" id="btn-reply-more" onClick={()=>{
+            {!loading && limit < data.replyComments.length && <div className="text" id="btn-reply-more" onClick={()=>{
                 let newLimit = limit + 2;
                 setLimit(newLimit);
-                refetch();
             }}>More</div>}
-        </div>
-    </div>
-}
-
-const ReplyItem:React.FC<{reply:any, setFetch:Function}> = ({reply, setFetch})=>{
-    const [like, setLike] = useState<any>(undefined);
-    const {loading, data, error, refetch} = useQuery(GET_LIKED_COMMENT, {variables:{
-        userid: reply.user_id,
-        commentid: reply.id,
-    }});
-
-    const [likeComment] = useMutation(LIKE_COMMENT);
-    const [unlikeComment] = useMutation(UNLIKE_COMMENT);
-
-    if(!loading){
-        if(data.likedComments.length <= 0 && like === undefined){
-            setLike(false);
-        } else if(data.likedComments.length > 0 && like === undefined) {
-            setLike(true);
-        }
-    }
-
-    function handleLike(){
-        if(like){
-            unlikeComment({variables:{
-                userid: reply.user_id,
-                commentid: reply.id,
-            }}).then(()=>{
-                setLike(false);
-                refetch();
-                setFetch(true);
-            }).catch((err)=>{
-                console.log(err);
-            })
-        } else if(!like){
-            likeComment({variables:{
-                userid: reply.user_id,
-                commentid: reply.id,
-            }}).then(()=>{
-                setLike(true);
-                refetch();
-                setFetch(true);
-            }).catch((err)=>{
-                console.log(err);
-            })
-        }
-    }
-
-    return <div key={reply.id} className="reply-content">
-        <div className="header-comment">
-            <UserPostView userid={reply.user_id} type={"comment"}/>
-            <div className="like-counter">
-                <p className="text" id="counter">{reply.likes - 1}</p>
-                <div onClick={handleLike}>
-                    {like ? <Liked/>: <Likes/>}
-                </div>
-            </div>
-        </div>
-        <hr />
-        <div className="footer-comment">
-            <p className="text" id="comment-content">{reply.content}</p>
-            
         </div>
     </div>
 }

@@ -23,7 +23,8 @@ export default function Home(){
         first_name:"",
         last_name:"",
         profile_photo: "",
-        job: ""
+        job: "",
+        followers: 1,
     };
     const [bgImage, setBgImage] = useState("");
     const [load, setload] = useState(true);
@@ -65,8 +66,8 @@ export default function Home(){
             <hr />
 
             <div className="connection-container">
-                <p className="text" id="label">Connections</p>
-                <p className="text" id="counter">10</p>
+                <p className="text" id="label">Followers</p>
+                <p className="text" id="counter">{user.followers - 1}</p>
             </div>
         </div>
         <div className="home-post">

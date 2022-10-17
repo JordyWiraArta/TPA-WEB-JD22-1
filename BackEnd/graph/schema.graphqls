@@ -2,6 +2,8 @@
 #
 # https://gqlgen.com/getting-started/
 
+scalar Time
+
 type Experience{
   id: ID!
   user_id: ID!
@@ -35,10 +37,12 @@ type User {
   headline: String!
   is_active: Boolean!
   active_code: String!
+  followers: Int!
+  views: Int!
 }
 
 type connect_invitation{
-  id: Int
+  id: ID!
   user_src_id: ID!
   user_dst_id: ID!
   message: String!
@@ -52,6 +56,7 @@ type post{
   type: String!
   likes: Int!
   comments: Int!
+  create_at: Time!
 }
 
 type likedPost{
@@ -74,6 +79,7 @@ type comment{
   reply_id: ID!
   content: String!
   likes: Int!
+  create_at: Time!
 }
 
 type likedComment{
@@ -91,11 +97,31 @@ type connection{
   connected_id: ID!
 }
 
+type notification{
+  user_id: ID!
+  src_id: ID!
+  content: String!
+}
+
+type message{
+  room_id: ID!
+  text: String!
+  image_url: String!
+  user_id: String!
+}
+
+type roomChat{
+  id: ID!
+  user_id1: ID!
+  user_id2: ID!
+}
+
 type Query {
   users: [User!]!
   currUser(user_id:ID!): User!
   posts(number:Int!): [post!]!
-  userInvitations(user_id:ID!): [connect_invitation!]!
+  userInvitations(user_id:ID!, dst_id:ID!): [connect_invitation!]!
+  myInvitations(dst_id:ID!): [connect_invitation!]!
   userEducations(user_id:ID!): [Education!]!
   userExperiences(user_id:ID!): [Experience!]!
   comments(post_id: ID!, number:Int!): [comment!]!
@@ -107,6 +133,9 @@ type Query {
   connectors(user_id:ID!): [connection!]!
   jobPosts: [jobPost!]!
   likedPosts(user_id:ID!, post_id:ID!): [likedPost!]!
+  myNotifications(user_id:ID!): [notification!]!
+  messages(roomid:ID!): [messages!]!
+  roomChats(userid:ID!): [roomChats!]! 
 }
 
 input newUser{
@@ -156,6 +185,7 @@ input newJobPost{
 type Mutation {
   createUser(input: newUser!): User!
   updateUser(id: ID!, code:String!, input: updateUser!):User!
+  addViewUser(user_id:ID!): User!
   addEdu(input:inputEdu!): Education!
   addExp(input:inputExp): Experience!
   updateUserEdu(id:ID!,input:inputEdu!): Education!
@@ -170,4 +200,11 @@ type Mutation {
   createReplyComment(user_id:ID!, post_id:ID!, comment_id:ID!, content:String!): comment!
   likeComment(user_id:ID!, comment_id:ID!): likedComment!
   unlikeComment(user_id:ID!, comment_id:ID!): likedComment!
+  follow(user_id:ID!, follow_id: ID!): followedUser!
+  sendInvitation(user_id:ID!, connecting_id: ID!, message: String!): connect_invitation!
+  connect(user_id:ID!, connected_id:ID!): connection!
+  rejectInvitation(id:ID!): connect_invitation!
+  addNotification(src_id:ID!, content: String!): notification!
+  createRoomChat(userid:ID!, otherid:ID!): roomChat!
+  sendMessage(roomid:ID!, text:String!, image_url:String!, userid: ID!): message!
 }

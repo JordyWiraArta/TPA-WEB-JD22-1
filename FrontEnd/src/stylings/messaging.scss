@@ -1,0 +1,56 @@
+@use 'colors.scss' as *;
+
+#message-container{
+    margin-left: 300px;
+    margin-top: 100px;
+    display: flex;
+
+    .left-container{
+        width: 400px;
+        border: solid 2px;
+
+        .left-header{
+            margin: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-items: center;
+
+            #title{
+                font-size: 20px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            #searchBar{
+                margin-left: 10px;
+                display: flex;
+                align-items: center;
+                border: solid;
+                border-color: $black;
+                border-width: 3px;
+                border-radius: 20px;
+                padding: 5px;
+                background-color: $white;
+        
+                &:hover{
+                    border-color: $dark;
+                }
+                
+                #input{
+                    border: none;
+                    outline: none;
+                    font-size: 20px;
+                    
+                }
+                
+            }
+        }
+    }
+
+    .right-container{
+        width: 450px;
+        border: solid 2px;
+    }
+
+}

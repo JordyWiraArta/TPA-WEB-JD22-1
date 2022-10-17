@@ -12,6 +12,8 @@ export const GET_ALL_USERS= gql`
             profile_photo
             background_photo
             headline
+            followers
+            views
         }
     }
 `
@@ -28,6 +30,8 @@ export const GET_CURR_USER = gql`
             profile_photo
             background_photo
             headline
+            followers
+            views
         }
     }
 `

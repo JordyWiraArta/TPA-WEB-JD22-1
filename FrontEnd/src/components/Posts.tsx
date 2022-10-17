@@ -23,7 +23,6 @@ export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function
     }
 
     const {search} = useContext(searchContext);
-    console.log(search);
     if(loading) return <LoadingText/>
     else return <div>
     
@@ -55,8 +54,10 @@ export const Posts: React.FC<{isSearch:boolean, fetch:Boolean, setFetch:Function
                 <div className="info-container">
                     <p className="text" id="counter">{post.comments-1}</p>
                     <NumberComment/>
+                    
                     <p className="text" id="counter">{post.likes-1}</p>
-                    <Hearth/>
+                    {/* { <Hearth/>} */}
+                    <p className="text" id="counter">likes</p>
                 </div>
 
                 <hr />

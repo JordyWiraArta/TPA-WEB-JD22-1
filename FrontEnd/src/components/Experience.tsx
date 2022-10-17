@@ -3,9 +3,8 @@ import { useState } from "react";
 import { GET_EXPERIENCE } from "../lib/queryProfile";
 import { Add } from "../lib/symbols/add"
 import { Edit } from "../lib/symbols/Edit";
-import { InputExperience } from "./ProfileModal";
 
-export const Experience: React.FC<{setOpen:Function, id:String, fetch:Boolean, setFetch:Function, setUpd:Function}> = ({setOpen, id, fetch, setFetch, setUpd}) =>{
+export const Experience: React.FC<{setOpen:Function, id:String, fetch:Boolean, setFetch:Function, setUpd:Function, edits:boolean}> = ({setOpen, id, fetch, setFetch, setUpd,edits}) =>{
 
     const {loading, data, error, refetch} = useQuery(GET_EXPERIENCE, {variables:{
         id:id
@@ -24,9 +23,9 @@ export const Experience: React.FC<{setOpen:Function, id:String, fetch:Boolean, s
     return <div className="profile-component bg">
         <div className="header-component">
             <p className="text" id="sub-title">Experience</p>
-            <div id="btn-add" onClick={()=> setOpen(true)}>
+            {edits && <div id="btn-add" onClick={()=> setOpen(true)}>
                 <Add/>
-            </div>
+            </div>}
         </div>
 
         <div className="item-component">

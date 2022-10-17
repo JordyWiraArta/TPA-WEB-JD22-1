@@ -25,6 +25,7 @@
     
     #user-icon-peoples{
         height: 40px;
+        width: 40px;
     }
 
     
@@ -47,7 +48,7 @@
             }
         }
         
-        #btn-connect{
+        .btn{
             height: fit-content;
             padding: 5px;
             border: solid;
@@ -58,6 +59,23 @@
             &:hover{
                 background-color: $blue-1;
             }
+        }
+
+        #btn-send{
+            @extend .btn;
+            cursor: grab;
+            color: $white;
+            background-color: $linkedInBlue;
+
+            &:hover{
+                background-color: $linkedInBlue;
+            }
+        }
+
+        #followed{
+            cursor:grab;
+            color: black;
+            background-color: $linkedInBlue;
         }
     }
 

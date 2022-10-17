@@ -2,6 +2,10 @@
 
 package model
 
+import (
+	"time"
+)
+
 type Education struct {
 	ID           string `json:"id"`
 	UserID       string `json:"user_id"`
@@ -35,19 +39,22 @@ type User struct {
 	Headline        string `json:"headline"`
 	IsActive        bool   `json:"is_active"`
 	ActiveCode      string `json:"active_code"`
+	Followers       int    `json:"followers"`
+	Views           int    `json:"views"`
 }
 
 type Comment struct {
-	ID      string `json:"id"`
-	PostID  string `json:"post_id"`
-	UserID  string `json:"user_id"`
-	ReplyID string `json:"reply_id"`
-	Content string `json:"content"`
-	Likes   int    `json:"likes"`
+	ID       string    `json:"id"`
+	PostID   string    `json:"post_id"`
+	UserID   string    `json:"user_id"`
+	ReplyID  string    `json:"reply_id"`
+	Content  string    `json:"content"`
+	Likes    int       `json:"likes"`
+	CreateAt time.Time `json:"create_at"`
 }
 
 type ConnectInvitation struct {
-	ID        *int   `json:"id"`
+	ID        string `json:"id"`
 	UserSrcID string `json:"user_src_id"`
 	UserDstID string `json:"user_dst_id"`
 	Message   string `json:"message"`
@@ -114,14 +121,21 @@ type NewUser struct {
 	Password  string `json:"password"`
 }
 
+type Notification struct {
+	UserID  string `json:"user_id"`
+	SrcID   string `json:"src_id"`
+	Content string `json:"content"`
+}
+
 type Post struct {
-	ID          string `json:"id"`
-	UserID      string `json:"user_id"`
-	ContentText string `json:"content_text"`
-	URL         string `json:"url"`
-	Type        string `json:"type"`
-	Likes       int    `json:"likes"`
-	Comments    int    `json:"comments"`
+	ID          string    `json:"id"`
+	UserID      string    `json:"user_id"`
+	ContentText string    `json:"content_text"`
+	URL         string    `json:"url"`
+	Type        string    `json:"type"`
+	Likes       int       `json:"likes"`
+	Comments    int       `json:"comments"`
+	CreateAt    time.Time `json:"create_at"`
 }
 
 type UpdateUser struct {

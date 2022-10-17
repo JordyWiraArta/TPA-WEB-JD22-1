@@ -36,6 +36,25 @@
         }
     }
 
+    .header-comment{
+        display: flex;
+        justify-content: space-between;
+
+        .like-counter{
+            display: flex;
+            align-items: center;
+            .icon-likes{
+                cursor: pointer;
+                height: 30px;
+            }
+
+            .icon-liked{
+                cursor: pointer;
+                height: 30px;
+                filter: invert(22%) sepia(68%) saturate(7476%) hue-rotate(356deg) brightness(110%) contrast(125%);
+            }
+        }
+    }
     .comment-content{
         margin-top: 10px;
         border: solid 1px;
@@ -43,25 +62,6 @@
         border-radius: 20px;
         z-index: 5;
 
-        .header-comment{
-            display: flex;
-            justify-content: space-between;
-
-            .like-counter{
-                display: flex;
-                align-items: center;
-                .icon-likes{
-                    cursor: pointer;
-                    height: 30px;
-                }
-
-                .icon-liked{
-                    cursor: pointer;
-                    height: 30px;
-                    filter: invert(22%) sepia(68%) saturate(7476%) hue-rotate(356deg) brightness(110%) contrast(125%);
-                }
-            }
-        }
 
 
         .footer-comment{
@@ -82,23 +82,23 @@
                 }
             }
         }
+    }
 
-        .reply-container{
-            margin-top: 20px;
-            #title{
-                border: solid 1px;
-                border-radius: 40px;
-                width: fit-content;
-                padding: 5px;
-                font-size: 12px;
-                font-weight: 700;
-                opacity: 0.8;
-            }
+    
 
-            .reply-content{
-                margin-top: 30px;
-                padding-left: 30px;
-            }
+    .reply-container{
+        #title{
+            width: fit-content;
+            text-decoration: underline;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .reply-content{
+            margin-top: 30px;
+            padding-left: 30px;
         }
     }
 
